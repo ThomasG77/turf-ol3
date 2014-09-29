@@ -1,0 +1,1 @@
+Le but de ce contenu est de vous permettre de découvrir comment faire fonctionner Turf, une bibliothèque JavaScript pouvant fonctionner côté client comme serveur. Ce travail est directement inspiré de la version pour MapBox/Leaflet http://rousseau.io/turf-mapboxjs
