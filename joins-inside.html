@@ -10,10 +10,10 @@
     </style>
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
     <script src="ol3/js/ol-debug.js" type="text/javascript"></script>
-    <title>Turf and OpenLayers 3 - add point</title>
+    <title>Turf and OpenLayers 3 - Inside</title>
   </head>
   <body>
-    <h2>Add point</h2>
+    <h2>Inside</h2>
     <div id="map" class="map"></div>
     <script type="text/javascript">
       // Declare a GeoJSON source
@@ -34,31 +34,32 @@
         man_made: 'crane'
       });
 
+      var poly = turf.polygon([[[0,0], [50, 50], [0,100], [100,100], [100,0]]])
+      var pt1 = turf.point(75, 75);
+      var pt2 = turf.point(-10, -10);
+      var pt2 = turf.point(-10, -40);
+
+      var in_out = [pt1, pt2, pt3].map(function(el) {
+        return turf.inside(el, poly);
+      });
+
+      console.log(in_out);
+
+      var fc = turf.featurecollection([pt1, pt2, pt3])
+      console.log(fc)
+
       // Declare a formatter to read GeoJSON
       var format = new ol.format.GeoJSON();
 
       // Declare a source
       var vectorSource = new ol.source.GeoJSON();
 
-      // When reading feature, reproject to EPSG 3857
-      var feature = format.readFeature(pt1, {
+      // When reading features, reproject to EPSG 3857
+      var features = format.readFeatures(fc, {
         featureProjection: 'EPSG:3857'
       });
-      // Add a feature
-      vectorSource.addFeature(feature);
-
-      // Create an Array of ol.Feature
-      var feature_pt2 = format.readFeatures(pt2, {
-        featureProjection: 'EPSG:3857'
-      });
-      // Create another Array of ol.Feature
-      var feature_pt3 = format.readFeatures(pt3, {
-        featureProjection: 'EPSG:3857'
-      });
-      // Combine together two Array of ol.Feature, just to play and learn
-      var pt2_pt3 = feature_pt2.concat(feature_pt3);
-      // Add features to the source. Behind, OpenLayers create a FeatureCollection
-      vectorSource.addFeatures(pt2_pt3);
+      // Add features
+      vectorSource.addFeatures(features);
 
       // Declare a vector layer with the already
       // created source containing added features
