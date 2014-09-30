@@ -1,0 +1,112 @@
+<!DOCTYPE html> 
+<html> 
+  <head> 
+    <title>points points and points</title>        
+    <link rel="stylesheet" href="/stylesheets/ol_default.css" type="text/css" /> 
+    <link rel="stylesheet" href="/stylesheets/ol_fullscreen.css" type="text/css" /> 
+    <style type="text/css"> 
+      html, body, #map {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      #text {
+        position: absolute;
+        bottom: 1em;
+        left: 1em;
+        width: 512px;
+        z-index: 20000;
+        background-color: white;
+        padding: 0 0.5em 0.5em 0.5em;
+      }
+    </style> 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script src="http://openlayers.org/api/OpenLayers.js"></script> 
+    <script>
+      var map;
+      function init(){
+        // create the map
+        map = new OpenLayers.Map('map');
+
+        var ol_wms = new OpenLayers.Layer.WMS( "OpenLayers WMS",
+          "http://vmap0.tiles.osgeo.org/wms/vmap0",
+          {layers: 'basic'} 
+        );
+        var ol_wms_nobuffer = new OpenLayers.Layer.WMS( "OpenLayers WMS (no tile buffer)",
+          "http://vmap0.tiles.osgeo.org/wms/vmap0",
+          {layers: 'basic'}, {buffer: 0}
+        );
+        var pts = new OpenLayers.Layer.Vector("Points");
+
+        map.addLayers([ol_wms, ol_wms_nobuffer, pts]);
+        map.addControl(new OpenLayers.Control.LayerSwitcher());
+        map.setCenter(new OpenLayers.LonLat(-100, 40), 4);
+
+        pts.addFeatures([new OpenLayers.Feature.Vector(
+          new OpenLayers.Geometry.Point(-100, 40),
+          null, 
+          null)
+        ]);
+
+        // re-draw points
+        $('#draw').click(redraw);
+        // clear graphics
+        $('#clear').click(clear);
+      }
+      function redraw() {
+        // get new number of points, the point layer and the map extent
+        // also declare a new array for our new points
+        var num = $('#num').attr('value'),
+          ptlyr = map.getLayersBy('name', 'Points')[0],
+          ext = map.getExtent(),
+          newpts = [];
+        // calc map width and height
+        var width = ext.left - ext.right,
+          height = ext.top - ext.bottom;
+        console.log(width, height);
+        // generate "random" points within the map's extent
+        for (var i=0; i<num; i++) {
+          var randx = Math.random(),
+            randy = Math.random();
+          var x = (randx*width) + ext.right,
+            y = (randy*height) + ext.bottom;
+          newpts[i] = new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point(x, y), null, null
+          );
+        }
+        ptlyr.removeAllFeatures();
+        ptlyr.addFeatures(newpts);
+      }
+      function clear() {
+        map.getLayersBy('name', 'Points')[0].removeAllFeatures();
+      }
+    </script> 
+  </head> 
+  <body onload="init()"> 
+    <div id="map"></div> 
+      <div id="text"> 
+        <h1 id="title">How Many Points...</h1> 
+        <div id="docs">
+          <p>
+            Number of points to place on the map: 
+            <input id="num" type="text" value="1000" />
+            <button id="draw">Draw</button>
+            <button id="clear">Clear</button>
+          <p>
+            This page is a tweaked version the 
+            <a href="http://openlayers.org/dev/examples/fullScreen.html">full screen</a>
+            sample.
+          </p>
+        </div> 
+    </div> 
+  <!-- mathiasbynens.be/notes/async-analytics-snippet Change UA-XXXXX-X to be your site's ID -->
+  <script>
+    var _gaq=[["_setAccount","UA-22923757-1"],["_trackPageview"]];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+    g.src=("https:"==location.protocol?"//ssl":"//www")+".google-analytics.com/ga.js";
+    s.parentNode.insertBefore(g,s)}(document,"script"));
+  </script>
+  </body> 
+</html> 
+
