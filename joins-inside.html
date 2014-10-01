@@ -133,8 +133,11 @@
             });
             var featureDraw = formatDraw.writeFeature(e.feature);
 
+            // Loop on features
             vectorSource.getFeatures().forEach(function (el) {
-              var feat = formatDraw.writeFeature(el)
+              var feat = formatDraw.writeFeature(el);
+              // Below function can be replaced with ol.extent.intersects
+              // if drawing a bounding box
               var isInside = turf.inside(feat, featureDraw);
               el.set('isInside', isInside);
             });
