@@ -1,4 +1,4 @@
-<iframe src="/joins-inside.html" width="800" height="300" frameBorder="0" seamless="seamless">
+<iframe src="/joins-inside.html" width="770" height="500" frameBorder="0" seamless="seamless">
 </iframe>
 
 ```html
