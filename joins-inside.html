@@ -23,11 +23,42 @@
       Activate/Desactivate drawing
     </button>
     <script type="text/javascript">
+      var geojsonToFeatures = function geojsonToFeatures(featurecollection) {
+        // Declare a formatter to read GeoJSON
+        var format = new ol.format.GeoJSON();
+
+        // Read GeoJSON features
+        var features = format.readFeatures(featurecollection);
+        return features;
+      }
+
+      var generateRandomPts = function generateRandomPts(num) {
+        // Function inspired by the code from http://swingley.appspot.com/maps/olpts
+        var ext = map.getView().calculateExtent(map.getSize());
+        var newpts = [];
+        // calc map width and height
+        var width = ext[2] - ext[0],
+           height = ext[3] - ext[1];
+        console.log(width, height);
+        // generate "random" points within the map's extent
+        // Caution: we do not care about projection, e.g Spherical Mercator here
+        for (var i = 0; i < num; i++) {
+          var randx = Math.random(),
+              randy = Math.random();
+          var x = ext[0] + (randx * width),
+              y = ext[1] + (randy * height);
+          newpts.push(turf.point(x, y));
+        }
+        var fcrandom = turf.featurecollection(newpts);
+
+        return fcrandom;
+      }
+      
       // Declare a source for points and drawing
       var vectorSource = new ol.source.GeoJSON();
       var vectorSourceDrawing = new ol.source.GeoJSON();
 
-      // Crreate a style function for coloring points
+      // Create a style function for coloring points
       var pointStyles = (function() {
         var defaultStyle = [new ol.style.Style({
           image: new ol.style.Circle({
@@ -79,34 +110,8 @@
         })
       });
 
-      var generateRandomPts = function generateRandomPts(num) {
-        // Function inspired by the code from http://swingley.appspot.com/maps/olpts
-        var ext = map.getView().calculateExtent(map.getSize());
-        var newpts = [];
-        // calc map width and height
-        var width = ext[2] - ext[0],
-           height = ext[3] - ext[1];
-        console.log(width, height);
-        // generate "random" points within the map's extent
-        // Caution: we do not care about projection, e.g Spherical Mercator here
-        for (var i = 0; i < num; i++) {
-          var randx = Math.random(),
-              randy = Math.random();
-          var x = ext[0] + (randx * width),
-              y = ext[1] + (randy * height);
-          newpts.push(turf.point(x, y));
-        }
-        var fcrandom = turf.featurecollection(newpts);
-
-        // Declare a formatter to read GeoJSON
-        var format = new ol.format.GeoJSON();
-
-        // Read GeoJSON features
-        var features = format.readFeatures(fcrandom);
-        return features;
-      }
       // Generate and add random features
-      var newfeatures = generateRandomPts(50);
+      var newfeatures = geojsonToFeatures(generateRandomPts(50));
       vectorSource.addFeatures(newfeatures);
 
       // Create a button and bind a click function
@@ -115,7 +120,7 @@
       button.onclick = function (e) {
         var toggleState = this.getAttribute('data-toggle');
         // Some issues due to type. Can't use !toggleState to go back and forth
-        // between true and false (not boolean but string)
+        // between true and false (type not boolean but string)
         // Remove drawing interaction because
         if (toggleState === 'true') {
           this.setAttribute('data-toggle', 'false');
