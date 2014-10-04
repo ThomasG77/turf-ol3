@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="ol3/css/ol.css" type="text/css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
+    <script src="ol3/js/ol-debug.js" type="text/javascript"></script>
+    <title>Turf and OpenLayers 3 - Inside</title>
+  </head>
+  <body>
+    <h2>Inside</h2>
+    <div id="map" class="map"></div>
+    <button id="drawtoggle" data-toggle="false" type="button">
+      Activate/Desactivate drawing
+    </button>
+    <script type="text/javascript">
+      // Declare a source for points and drawing
+      var vectorSource = new ol.source.GeoJSON();
+      var vectorSourceDrawing = new ol.source.GeoJSON();
+
+      // Create a style function for coloring points
+      var pointStyles = (function() {
+        var defaultStyle = [new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: new ol.style.Fill({color: 'red'}),
+            radius: 5
+          })
+        })];
+        var ruleStyle = [new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: new ol.style.Fill({color: 'yellow'}),
+            radius: 5
+          })
+        })];
+        return function(feature, resolution) {
+          var isInside = feature.get('isInside');
+          if (isInside != undefined && isInside === true) {
+            return ruleStyle;
+          } else {
+            return defaultStyle;
+          }
+        };
+      })();
+
+      // Declare vector layers, one for points and the other for the drawing
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: pointStyles
+      });
+
+      var vectorLayerDrawing = new ol.layer.Vector({
+        source: vectorSourceDrawing
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.MapQuest({
+              layer: 'osm'
+            })
+          }),
+          vectorLayer,
+          vectorLayerDrawing
+        ],
+        view: new ol.View({
+          center: ol.proj.transform([-1.5603, 47.2383], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 11
+        })
+      });
+
+      var generateRandomPts = function generateRandomPts(num) {
+        // Function inspired by the code from http://swingley.appspot.com/maps/olpts
+        var ext = map.getView().calculateExtent(map.getSize());
+        var newpts = [];
+        // calc map width and height
+        var width = ext[2] - ext[0],
+           height = ext[3] - ext[1];
+        console.log(width, height);
+        // generate "random" points within the map's extent
+        // Caution: we do not care about projection, e.g Spherical Mercator here
+        for (var i = 0; i < num; i++) {
+          var randx = Math.random(),
+              randy = Math.random();
+          var x = ext[0] + (randx * width),
+              y = ext[1] + (randy * height);
+          newpts.push(turf.point(x, y));
+        }
+        var fcrandom = turf.featurecollection(newpts);
+
+        // Declare a formatter to read GeoJSON
+        var format = new ol.format.GeoJSON();
+
+        // Read GeoJSON features
+        var features = format.readFeatures(fcrandom);
+        return features;
+      }
+      // Generate and add random features
+      var newfeatures = generateRandomPts(50);
+      vectorSource.addFeatures(newfeatures);
+
+      // Create a button and bind a click function
+      var button = document.getElementById('drawtoggle');
+      var draw;
+      button.onclick = function (e) {
+        var toggleState = this.getAttribute('data-toggle');
+        // Some issues due to type. Can't use !toggleState to go back and forth
+        // between true and false (not boolean but string)
+        // Remove drawing interaction because
+        if (toggleState === 'true') {
+          this.setAttribute('data-toggle', 'false');
+          map.removeInteraction(draw);
+        } else {
+          this.setAttribute('data-toggle', 'true');
+          // Assign draw interaction (variable created before for scope reason)
+          draw = new ol.interaction.Draw({
+            source: vectorSourceDrawing,
+            type: 'Polygon'
+          });
+
+          // Bind event on the draw component
+          draw.on('drawend', function (e) {
+            // Remove immediately other features for demo purpose
+            vectorSourceDrawing.clear();
+            var formatDraw = new ol.format.GeoJSON({
+              defaultDataProjection: 'EPSG:4326'
+            });
+            var featureDraw = formatDraw.writeFeature(e.feature);
+
+            // Loop on features
+            vectorSource.getFeatures().forEach(function (el) {
+              var feat = formatDraw.writeFeature(el);
+              // Below function can be replaced with ol.extent.intersects
+              // if drawing a bounding box
+              var isInside = turf.inside(feat, featureDraw);
+              el.set('isInside', isInside);
+            });
+          });
+          // Add the interaction to the map 
+          map.addInteraction(draw);
+        }
+      }
+    </script>
+  </body>
+</html>
