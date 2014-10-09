@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="ol3/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
     <style>
       body {
         margin: 0;
@@ -13,52 +13,60 @@
       }
     </style>
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
-    <script src="ol3/js/ol-debug.js" type="text/javascript"></script>
-    <title>Turf and OpenLayers 3 - Inside</title>
+    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/js/q.js"></script>
+    <script src="assets/js/ajax.min.js"></script>
+    <title>Turf and OpenLayers 3 - Tag</title>
   </head>
   <body>
-    <h2>Inside</h2>
+    <h2>Tag</h2>
     <div id="map" class="map"></div>
-    <button id="drawtoggle" data-toggle="false" type="button">
-      Activate/Desactivate drawing
+    <button id="drawrandom" data-toggle="false" type="button">
+      Add random points on the map extent and change color for points within the existing polygons
     </button>
     <script type="text/javascript">
+
+      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
+        var options = options || {};
+        // Declare a formatter to read GeoJSON
+        var format = new ol.format.GeoJSON();
+
+        // Read GeoJSON features
+        var features = format.readFeatures(featurecollection, options);
+        return features;
+      }
+
+      // Playground using Q.js promise, see https://github.com/kriskowal/q/wiki/Coming-from-jQuery
+      // For the demo purpose, we don't want to use OpenLayers 3 to make call to geojson files here
+      var callAjax = function (url) {
+        return function() {
+          var d = Q.defer();
+          ajax.getJSON(url, function (res) {
+            //console.log(res);
+            d.resolve(res);
+          });
+          return d.promise;
+        }
+      };
+
       // Declare a source for points and drawing
-      var vectorSource = new ol.source.GeoJSON();
-      var vectorSourceDrawing = new ol.source.GeoJSON();
+      var vectorSourcePolygons = new ol.source.GeoJSON();
+      var vectorSourcePoints = new ol.source.GeoJSON();
 
-      // Create a style function for coloring points
-      var pointStyles = (function() {
-        var defaultStyle = [new ol.style.Style({
+      var pointsStyle = [new ol.style.Style({
           image: new ol.style.Circle({
-            fill: new ol.style.Fill({color: 'red'}),
+            fill: new ol.style.Fill({color: 'black'}),
             radius: 5
           })
-        })];
-        var ruleStyle = [new ol.style.Style({
-          image: new ol.style.Circle({
-            fill: new ol.style.Fill({color: 'yellow'}),
-            radius: 5
-          })
-        })];
-        return function(feature, resolution) {
-          var isInside = feature.get('isInside');
-          if (isInside != undefined && isInside === true) {
-            return ruleStyle;
-          } else {
-            return defaultStyle;
-          }
-        };
-      })();
+      })];
 
-      // Declare vector layers, one for points and the other for the drawing
-      var vectorLayer = new ol.layer.Vector({
-        source: vectorSource,
-        style: pointStyles
+      var vectorLayerPolygons = new ol.layer.Vector({
+        source: vectorSourcePolygons
       });
 
-      var vectorLayerDrawing = new ol.layer.Vector({
-        source: vectorSourceDrawing
+      var vectorLayerPoints = new ol.layer.Vector({
+        source: vectorSourcePoints,
+        style: pointsStyle
       });
 
       // Instanciate a map and add layers
@@ -70,8 +78,8 @@
               layer: 'osm'
             })
           }),
-          vectorLayer,
-          vectorLayerDrawing
+          vectorLayerPolygons,
+          vectorLayerPoints
         ],
         view: new ol.View({
           center: ol.proj.transform([-1.5603, 47.2383], 'EPSG:4326', 'EPSG:3857'),
@@ -79,77 +87,46 @@
         })
       });
 
-      var generateRandomPts = function generateRandomPts(num) {
-        // Function inspired by the code from http://swingley.appspot.com/maps/olpts
-        var ext = map.getView().calculateExtent(map.getSize());
-        var newpts = [];
-        // calc map width and height
-        var width = ext[2] - ext[0],
-           height = ext[3] - ext[1];
-        console.log(width, height);
-        // generate "random" points within the map's extent
-        // Caution: we do not care about projection, e.g Spherical Mercator here
-        for (var i = 0; i < num; i++) {
-          var randx = Math.random(),
-              randy = Math.random();
-          var x = ext[0] + (randx * width),
-              y = ext[1] + (randy * height);
-          newpts.push(turf.point(x, y));
-        }
-        var fcrandom = turf.featurecollection(newpts);
 
-        // Declare a formatter to read GeoJSON
-        var format = new ol.format.GeoJSON();
-
-        // Read GeoJSON features
-        var features = format.readFeatures(fcrandom);
-        return features;
-      }
-      // Generate and add random features
-      var newfeatures = generateRandomPts(50);
-      vectorSource.addFeatures(newfeatures);
-
-      // Create a button and bind a click function
-      var button = document.getElementById('drawtoggle');
-      var draw;
-      button.onclick = function (e) {
-        var toggleState = this.getAttribute('data-toggle');
-        // Some issues due to type. Can't use !toggleState to go back and forth
-        // between true and false (not boolean but string)
-        // Remove drawing interaction because
-        if (toggleState === 'true') {
-          this.setAttribute('data-toggle', 'false');
-          map.removeInteraction(draw);
-        } else {
-          this.setAttribute('data-toggle', 'true');
-          // Assign draw interaction (variable created before for scope reason)
-          draw = new ol.interaction.Draw({
-            source: vectorSourceDrawing,
-            type: 'Polygon'
+      Q.all([
+        callAjax("assets/data/quartiers_nantes.geojson")(),
+        callAjax("assets/data/key_shop_with_name_nantes_area.geojson")()
+      ]).spread(function(polys_fc, points_fc) {
+        console.log(polys_fc, points_fc);
+        turf.tag(points_fc, polys_fc, 'NOM', 'quartier');
+        
+        // Set random colors. See Paul Irish post at
+        // http://www.paulirish.com/2009/random-hex-color-code-snippets/
+        var quartiers = {};
+        polys_fc.features.forEach(function(el) {
+          quartiers[el.properties.NOM] = '#'+Math.floor(Math.random()*16777215).toString(16);
+        });
+        console.log(quartiers);
+          vectorLayerPoints.setStyle(function(feature, resolution) {
+            if(feature.get('quartier')) {
+              if (Object.keys(quartiers).indexOf(feature.get('quartier')) != -1) {
+                var randomColor = quartiers[feature.get('quartier')];
+                return [new ol.style.Style({
+                    image: new ol.style.Circle({
+                      fill: new ol.style.Fill({
+                        color: randomColor}),
+                      radius: 5
+                    })
+                })]
+              }   
+            } else {
+              return pointsStyle;
+            };
           });
 
-          // Bind event on the draw component
-          draw.on('drawend', function (e) {
-            // Remove immediately other features for demo purpose
-            vectorSourceDrawing.clear();
-            var formatDraw = new ol.format.GeoJSON({
-              defaultDataProjection: 'EPSG:4326'
-            });
-            var featureDraw = formatDraw.writeFeature(e.feature);
-
-            // Loop on features
-            vectorSource.getFeatures().forEach(function (el) {
-              var feat = formatDraw.writeFeature(el);
-              // Below function can be replaced with ol.extent.intersects
-              // if drawing a bounding box
-              var isInside = turf.inside(feat, featureDraw);
-              el.set('isInside', isInside);
-            });
-          });
-          // Add the interaction to the map 
-          map.addInteraction(draw);
-        }
-      }
+        console.log(points_fc, JSON.stringify(points_fc));
+        vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
+        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
+      });
     </script>
   </body>
 </html>
