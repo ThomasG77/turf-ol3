@@ -21,9 +21,6 @@
   <body>
     <h2>Tag</h2>
     <div id="map" class="map"></div>
-    <button id="drawrandom" data-toggle="false" type="button">
-      Add random points on the map extent and change color for points within the existing polygons
-    </button>
     <script type="text/javascript">
 
       var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
@@ -86,7 +83,6 @@
           zoom: 11
         })
       });
-
 
       Q.all([
         callAjax("assets/data/quartiers_nantes.geojson")(),
