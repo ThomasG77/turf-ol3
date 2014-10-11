@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
+    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/js/q.js"></script>
+    <script src="assets/js/ajax.min.js"></script>
+    <title>Turf and OpenLayers 3 - Filter</title>
+  </head>
+  <body>
+    <h2>Filter</h2>
+    <div id="map" class="map"></div>
+    <input id="letter" type="text" name="input" placeholder="Choose the letter to keep from GeoJSON sentence">
+    <button id="filter"type="button">
+      Filter depending on the input letter
+    </button>
+    <button id="reset"type="button">
+      Add again all the features
+    </button>
+    <script type="text/javascript">
+
+      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
+        var options = options || {};
+        // Declare a formatter to read GeoJSON
+        var format = new ol.format.GeoJSON();
+
+        // Read GeoJSON features
+        var features = format.readFeatures(featurecollection, options);
+        return features;
+      }
+
+      // Playground using Q.js promise, see https://github.com/kriskowal/q/wiki/Coming-from-jQuery
+      // For the demo purpose, we don't want to use OpenLayers 3 to make call to geojson files here
+      var callAjax = function (url) {
+        return function() {
+          var d = Q.defer();
+          ajax.getJSON(url, function (res) {
+            d.resolve(res);
+          });
+          return d.promise;
+        }
+      };
+
+      // Declare a source for polygons
+      var vectorSourcePolygons = new ol.source.GeoJSON();
+
+      var vectorLayerPolygons = new ol.layer.Vector({
+        source: vectorSourcePolygons
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.MapQuest({
+              layer: 'osm'
+            })
+          }),
+          vectorLayerPolygons
+        ],
+        view: new ol.View({
+          center: ol.proj.transform([30.33115, 6.16769], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 3
+        })
+      });
+      // We will share the geojson content to not reload the page 
+      var myLetters;
+      Q.all([
+        callAjax("assets/data/turf_text_poly.geojson")()
+      ]).spread(function(polys_fc) {
+        myLetters = polys_fc;
+
+        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
+      });
+
+      // Create a button and bind a click function
+      var button = document.getElementById('filter');
+      button.onclick = function (e) {
+        var inputValueUpper = document.getElementById('letter').value.toUpperCase();
+        if (inputValueUpper.match(/^[TURFISAWEOM]$/)) {
+          console.log('input');
+
+          vectorSourcePolygons.clear();
+          var filtered = turf.filter(myLetters, 'letter', inputValueUpper);
+          
+          vectorSourcePolygons.addFeatures(geojsonToFeatures(filtered, {
+            featureProjection: 'EPSG:3857'
+          }));
+
+        } else {
+          console.log('Retry, your input is wrong!');
+        }
+      }
+      // Create a button and bind a click function
+      var button = document.getElementById('reset');
+      button.onclick = function (e) {
+        vectorSourcePolygons.clear();
+        vectorSourcePolygons.addFeatures(geojsonToFeatures(myLetters, {
+          featureProjection: 'EPSG:3857'
+        }));
+      }
+    </script>
+  </body>
+</html>

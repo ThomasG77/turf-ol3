@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
+    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/js/q.js"></script>
+    <script src="assets/js/ajax.min.js"></script>
+    <title>Turf and OpenLayers 3 - Sample</title>
+  </head>
+  <body>
+    <h2>Filter</h2>
+    <div id="map" class="map"></div>
+    <input id="letter" type="text" name="input" placeholder="Choose the number of letters to keep from GeoJSON source">
+    <button id="filter"type="button">
+      Choose number of letter to keep
+    </button>
+    <button id="reset"type="button">
+      Add again all the features
+    </button>
+    <script type="text/javascript">
+
+      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
+        var options = options || {};
+        // Declare a formatter to read GeoJSON
+        var format = new ol.format.GeoJSON();
+
+        // Read GeoJSON features
+        var features = format.readFeatures(featurecollection, options);
+        return features;
+      }
+
+      // Playground using Q.js promise, see https://github.com/kriskowal/q/wiki/Coming-from-jQuery
+      // For the demo purpose, we don't want to use OpenLayers 3 to make call to geojson files here
+      var callAjax = function (url) {
+        return function() {
+          var d = Q.defer();
+          ajax.getJSON(url, function (res) {
+            d.resolve(res);
+          });
+          return d.promise;
+        }
+      };
+
+      // Declare a source for polygons
+      var vectorSourcePoints = new ol.source.GeoJSON();
+
+      var vectorLayerPoints = new ol.layer.Vector({
+        source: vectorSourcePoints
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.MapQuest({
+              layer: 'osm'
+            })
+          }),
+          vectorLayerPoints
+        ],
+        view: new ol.View({
+          center: ol.proj.transform([-1.5603, 47.2383], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 10
+        })
+      });
+      // We will share the geojson content to not reload the page 
+      var myPoints;
+      Q.all([
+        callAjax("assets/data/key_shop_with_name_nantes_area.geojson")()
+      ]).spread(function(points_fc) {
+        myPoints = points_fc;
+
+        vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
+      });
+
+      // Create a button and bind a click function
+      var button = document.getElementById('filter');
+      button.onclick = function (e) {
+        var inputValue = document.getElementById('letter').value;
+        if (inputValue.match(/^\d+$/)) {
+
+          vectorSourcePoints.clear();
+          var filtered = turf.sample(myPoints, parseInt(inputValue));
+
+          vectorSourcePoints.addFeatures(geojsonToFeatures(filtered, {
+            featureProjection: 'EPSG:3857'
+          }));
+        } else {
+          console.log('The input is invalid!')
+        }
+      }
+      // Create a button and bind a click function
+      var button = document.getElementById('reset');
+      button.onclick = function (e) {
+        vectorSourcePoints.clear();
+        vectorSourcePoints.addFeatures(geojsonToFeatures(myPoints, {
+          featureProjection: 'EPSG:3857'
+        }));
+      }
+    </script>
+  </body>
+</html>
