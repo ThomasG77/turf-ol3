@@ -39,7 +39,6 @@
         return function() {
           var d = Q.defer();
           ajax.getJSON(url, function (res) {
-            //console.log(res);
             d.resolve(res);
           });
           return d.promise;
@@ -98,30 +97,32 @@
           quartiers[el.properties.NOM] = '#'+Math.floor(Math.random()*16777215).toString(16);
         });
         console.log(quartiers);
-          vectorLayerPoints.setStyle(function(feature, resolution) {
-            if(feature.get('quartier')) {
-              if (Object.keys(quartiers).indexOf(feature.get('quartier')) != -1) {
-                var randomColor = quartiers[feature.get('quartier')];
-                return [new ol.style.Style({
-                    image: new ol.style.Circle({
-                      fill: new ol.style.Fill({
-                        color: randomColor}),
-                      radius: 5
-                    })
-                })]
-              }   
-            } else {
-              return pointsStyle;
-            };
-          });
+        vectorLayerPoints.setStyle(function(feature, resolution) {
+          if(feature.get('quartier')) {
+            if (Object.keys(quartiers).indexOf(feature.get('quartier')) != -1) {
+              var randomColor = quartiers[feature.get('quartier')];
+              return [new ol.style.Style({
+                  image: new ol.style.Circle({
+                    fill: new ol.style.Fill({
+                      color: randomColor}),
+                    radius: 5
+                  })
+              })]
+            }   
+          } else {
+            return pointsStyle;
+          };
+        });
+
+        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
 
         console.log(points_fc, JSON.stringify(points_fc));
         vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
           featureProjection: 'EPSG:3857'
         }));
-        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
+        
       });
     </script>
   </body>
