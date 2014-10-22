@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .map {
+        height: 400px;
+        width: 50%;
+      }
+      #map1 {
+        float:right;
+      }
+    </style>
+    <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
+    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/js/q.js"></script>
+    <script src="assets/js/ajax.min.js"></script>
+    <title>Turf and OpenLayers 3 - Square</title>
+  </head>
+  <body>
+    <h2>Square</h2>
+    <div id="map1" class="map"></div>
+    <div id="map2" class="map"></div>
+    <script type="text/javascript">
+
+      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
+          var options = options || {};
+          // Declare a formatter to read GeoJSON
+          var format = new ol.format.GeoJSON();
+
+          // Read GeoJSON features
+          var features = format.readFeatures(featurecollection, options);
+          return features;
+      }
+
+      var map1 = new ol.Map({
+          layers: [
+              new ol.layer.Tile({
+                  source: new ol.source.TileWMS({
+                      url: 'http://demo.opengeo.org/geoserver/wms',
+                      params: {
+                          'LAYERS': 'ne:NE1_HR_LC_SR_W_DR'
+                      }
+                  })
+              })
+          ],
+          target: 'map1',
+          view: new ol.View({
+              projection: 'EPSG:4326',
+              center: [0, 0],
+              zoom: 2
+          })
+      });
+
+      var bbox_arr = [-20, -70, -24, -72];
+
+      function create2DimArray(array, n, callback) {
+          var result = [];
+          var intermediate = array;
+          for (var i = 0; i < n; i++) {
+              intermediate = callback(intermediate);
+              result.push(intermediate);
+          }
+          return result;
+      }
+
+      function calculateCoords(array) {
+          var result = [array[0], array[1] + 10, array[2], array[3] + 10];
+          return result;
+      }
+
+      function geojsonList(array) {
+          var result = array.map(function(el) {
+              return turf.bboxPolygon(el);
+          });
+          var result1 = array.map(function(el) {
+              var square = turf.square(el);
+              return turf.bboxPolygon(square);
+          })
+
+          var result2 = result.concat(result1);
+          return result2;
+      }
+
+      // Declare a source for polygons
+      function addBbox(map, array_geojson, epsg_options) {
+          var options = epsg_options || {
+              featureProjection: 'EPSG:3857'
+          };
+          var vectorSourcePolygons = new ol.source.GeoJSON();
+          var vectorLayerPolygons = new ol.layer.Vector({
+              source: vectorSourcePolygons
+          });
+
+          array_geojson.forEach(function(el) {
+              vectorSourcePolygons.addFeatures(geojsonToFeatures(el, options));
+          })
+          return vectorLayerPolygons;
+      }
+
+      var bbox_list = create2DimArray(bbox_arr, 14, calculateCoords)
+      var geojson_list = geojsonList(bbox_list)
+      var vectorLayerPolygons = addBbox(map1, geojson_list, {
+          featureProjection: 'EPSG:4326'
+      });
+      map1.addLayer(vectorLayerPolygons);
+
+      //basic map
+
+      var map2 = new ol.Map({
+          target: 'map2',
+          layers: [
+              new ol.layer.Tile({
+                  source: new ol.source.MapQuest({
+                      layer: 'osm'
+                  })
+              })
+          ],
+          view: new ol.View({
+              center: ol.proj.transform([0, 0], 'EPSG:4326', 'EPSG:3857'),
+              zoom: 2
+          })
+      });
+
+      function ptDegM(center, pointResolution) {
+          var cosLatitude = Math.cos(goog.math.toRadians(center[1]));
+          var newPointResolution = pointResolution * Math.PI * cosLatitude * ol.sphere.NORMAL.radius / 180;
+          return newPointResolution;
+      }
+
+      function ptMDeg(center, pointResolution) {
+          var cosLatitude = Math.cos(goog.math.toRadians(ol.proj.transform(center, 'EPSG:3857', 'EPSG:4326')[1]));
+          var radius = ol.sphere.NORMAL.radius;
+          var newPointResolution = pointResolution * (180 / (Math.PI * cosLatitude * radius));
+          return newPointResolution
+      }
+
+
+
+      map1.getView().bindTo('resolution', map2.getView()).transform(
+          function(sourceResolution) {
+              return ptDegM(this.source.getCenter(), sourceResolution);
+          },
+          function(targetResolution) {
+              return ptMDeg(this.target.getCenter(), targetResolution);
+          }
+      );
+
+      map1.getView().bindTo('center', map2.getView()).transform(
+          function(sourceResolution) {
+              return ol.proj.transform(sourceResolution, 'EPSG:4326', 'EPSG:3857');
+          },
+          function(targetResolution) {
+              return ol.proj.transform(targetResolution, 'EPSG:3857', 'EPSG:4326');
+          }
+      );
+
+      var vectorLayerPolygons = addBbox(map2, geojson_list);
+      map2.addLayer(vectorLayerPolygons);
+    </script>
+  </body>
+</html>
