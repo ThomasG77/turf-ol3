@@ -17,8 +17,6 @@
     </style>
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
     <script src="assets/ol3/js/ol-debug.js"></script>
-    <script src="assets/js/q.js"></script>
-    <script src="assets/js/ajax.min.js"></script>
     <title>Turf and OpenLayers 3 - Square</title>
   </head>
   <body>
@@ -138,8 +136,6 @@
           var newPointResolution = pointResolution * (180 / (Math.PI * cosLatitude * radius));
           return newPointResolution
       }
-
-
 
       map1.getView().bindTo('resolution', map2.getView()).transform(
           function(sourceResolution) {
