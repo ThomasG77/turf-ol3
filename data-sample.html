@@ -21,7 +21,7 @@
   <body>
     <h2>Filter</h2>
     <div id="map" class="map"></div>
-    <input id="letter" type="text" name="input" placeholder="Choose the number of letters to keep from GeoJSON source">
+    <input id="letter" type="text" name="input" placeholder="Choose the number of features to keep from GeoJSON source">
     <button id="filter"type="button">
       Choose number of letter to keep
     </button>
@@ -77,9 +77,9 @@
       });
       // We will share the geojson content to not reload the page 
       var myPoints;
-      Q.all([
-        callAjax("assets/data/key_shop_with_name_nantes_area.geojson")()
-      ]).spread(function(points_fc) {
+
+      callAjax("assets/data/key_shop_with_name_nantes_area.geojson")()
+        .then(function(points_fc) {
         myPoints = points_fc;
 
         vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {

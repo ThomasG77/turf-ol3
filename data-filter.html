@@ -77,9 +77,8 @@
       });
       // We will share the geojson content to not reload the page 
       var myLetters;
-      Q.all([
-        callAjax("assets/data/turf_text_poly.geojson")()
-      ]).spread(function(polys_fc) {
+      callAjax("assets/data/turf_text_poly.geojson")()
+      .then(function(polys_fc) {
         myLetters = polys_fc;
 
         vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
