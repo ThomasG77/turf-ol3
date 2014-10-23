@@ -39,20 +39,14 @@
       });
 
       var fc = turf.featurecollection([pt1, pt2, pt3])
-      console.log(fc)
+      console.log(fc);
 
-      // Declare a formatter to read GeoJSON
-      var format = new ol.format.GeoJSON();
-
-      // Declare a source
-      var vectorSource = new ol.source.GeoJSON();
-
-      // When reading features, reproject to EPSG 3857
-      var features = format.readFeatures(fc, {
-        featureProjection: 'EPSG:3857'
-      });
-      // Add features
-      vectorSource.addFeatures(features);
+      // Declare a source and directly embed the GeoJSON using the
+      // "experimental parameter "object"
+      var vectorSource = new ol.source.GeoJSON({
+        object: fc,
+        projection: 'EPSG:3857'
+      })
 
       // Declare a vector layer with the already
       // created source containing added features
