@@ -1,6 +1,6 @@
 # Partie Géométrie
 
-La partie géométrie est dédié à la construction des `Point` (points), `Line` (lignes), `Polygon` (polygones) et des `FeatureCollection` (collections d'objets).
+La partie géométrie est dédiée à la construction des `Point` (points), `Line` (lignes), `Polygon` (polygones) et des `FeatureCollection` (collections d'objets).
 
 Une collection est un regroupement de points, lignes ou polygones. Avec Turf, on ne manipule que les collections de type `FeatureCollection` qui comprennent des `Feature`, c'est à dire des objets ayant géométries et propriétés pour chacun des objets géographiques dessinés. Les collections de  type `GeometryCollection` ne sont pas gérées.
 
@@ -10,3 +10,5 @@ Ces derniers sont utiles par exemple pour figurer la france et les DOM-TOM (voir
 L'ensemble des éléments décrits ici peuvent être vus plus en détail dans [la spécification GeoJSON](http://geojson.org/geojson-spec.html), Turf étant directement destiné à manipuler du GeoJSON.
 
 Il faut noter que même si Turf facilite la création d'objets GeoJSON pour les débutants, quelqu'un avec un minimum de connaissances en JavaScript peut aisément s'en passer.
+
+Heureusement, sur d'autres aspects liés au traitement des données, il reste très intéressant.
