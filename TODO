@@ -1,0 +1,18 @@
+# TODO
+
+* distance sample: take the "Centre ville" Nantes neighbourhood center and use modify to move a point to see how far we are from the "Centre ville" 
+* nearest sample: use the same POI points and it's where you click that launch the nearest function call.
+* bboxPolygon sample: create the bbox polygon for Nantes town and another for the agglomeration to see urban sprawling
+* centroid sample: take the center of each Nantes neighbourhood and put them in a new layer
+* center sample: in truth it's the center of gravity (barycentre in maths)
+* square: set a max extent on the demo. Demo can failed because with sync, sometimes out of bounds and failed assertion.
+
+* plugin simplestyle for OpenLayers 3 See https://github.com/mapbox/mapbox.js/blob/5799ab238c2cd4e8126ae1dc577cd802f916e40d/src/simplestyle.js and
+
+* Change MapQuest tiles to Hydda (see below excerpt for Leaflet)
+
+var Hydda_Full = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
+  minZoom: 0,
+  maxZoom: 18,
+  attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+});
