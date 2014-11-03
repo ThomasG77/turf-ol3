@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
+    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/js/q.js"></script>
+    <script src="assets/js/ajax.min.js"></script>
+    <title>Turf and OpenLayers 3 - Envelope</title>
+  </head>
+  <body>
+    <h2>Envelope</h2>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+
+      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
+        var options = options || {};
+        // Declare a formatter to read GeoJSON
+        var format = new ol.format.GeoJSON();
+
+        // Read GeoJSON features
+        var features = format.readFeatures(featurecollection, options);
+        return features;
+      }
+
+      // Playground using Q.js promise, see https://github.com/kriskowal/q/wiki/Coming-from-jQuery
+      // For the demo purpose, we don't want to use OpenLayers 3 to make call to geojson files here
+      var callAjax = function (url) {
+        return function() {
+          var d = Q.defer();
+          ajax.getJSON(url, function (res) {
+            d.resolve(res);
+          });
+          return d.promise;
+        }
+      };
+
+      // Declare a source for polygons
+      var vectorSourcePolygons = new ol.source.GeoJSON();
+
+      var pointsStyle = [new ol.style.Style({
+        image: new ol.style.Circle({
+          fill: new ol.style.Fill({color: 'black'}),
+          radius: 3
+        })
+      })];
+
+      var vectorLayerPolygons = new ol.layer.Vector({
+        source: vectorSourcePolygons
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.MapQuest({
+              layer: 'osm'
+            })
+          }),
+          vectorLayerPolygons
+        ],
+        view: new ol.View({
+          center: ol.proj.transform([-1.5603, 47.2383], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 11
+        })
+      });
+
+      callAjax("assets/data/agglo_poly_nantes.geojson")()
+        .then(function(polys_fc) {
+        console.log(polys_fc);
+
+        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
+
+        var envelope = turf.envelope(polys_fc);
+        console.log(envelope);
+
+        vectorSourcePolygons.addFeatures(geojsonToFeatures(envelope, {
+          featureProjection: 'EPSG:3857'
+        }));
+        
+      });
+    </script>
+  </body>
+</html>
