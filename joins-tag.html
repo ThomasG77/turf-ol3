@@ -50,10 +50,10 @@
       var vectorSourcePoints = new ol.source.GeoJSON();
 
       var pointsStyle = [new ol.style.Style({
-          image: new ol.style.Circle({
-            fill: new ol.style.Fill({color: 'black'}),
-            radius: 5
-          })
+        image: new ol.style.Circle({
+          fill: new ol.style.Fill({color: 'black'}),
+          radius: 3
+        })
       })];
 
       var vectorLayerPolygons = new ol.layer.Vector({
@@ -88,13 +88,13 @@
         callAjax("assets/data/key_shop_with_name_nantes_area.geojson")()
       ]).spread(function(polys_fc, points_fc) {
         console.log(polys_fc, points_fc);
-        turf.tag(points_fc, polys_fc, 'NOM', 'quartier');
+        turf.tag(points_fc, polys_fc, 'nom', 'quartier');
         
         // Set random colors. See Paul Irish post at
         // http://www.paulirish.com/2009/random-hex-color-code-snippets/
         var quartiers = {};
         polys_fc.features.forEach(function(el) {
-          quartiers[el.properties.NOM] = '#'+Math.floor(Math.random()*16777215).toString(16);
+          quartiers[el.properties.nom] = '#'+Math.floor(Math.random()*16777215).toString(16);
         });
         console.log(quartiers);
         vectorLayerPoints.setStyle(function(feature, resolution) {
@@ -102,13 +102,14 @@
             if (Object.keys(quartiers).indexOf(feature.get('quartier')) != -1) {
               var randomColor = quartiers[feature.get('quartier')];
               return [new ol.style.Style({
-                  image: new ol.style.Circle({
-                    fill: new ol.style.Fill({
-                      color: randomColor}),
-                    radius: 5
-                  })
+                image: new ol.style.Circle({
+                  fill: new ol.style.Fill({
+                    color: randomColor
+                  }),
+                  radius: 3
+                })
               })]
-            }   
+            }
           } else {
             return pointsStyle;
           };
