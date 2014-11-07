@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
+    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/js/q.js"></script>
+    <script src="assets/js/ajax.min.js"></script>
+    <title>Turf and OpenLayers 3 - Nearest</title>
+  </head>
+  <body>
+    <h2>Nearest</h2>
+    <div id="map" class="map"></div>
+    <button id="drawtoggle" data-toggle="false" type="button">
+      Activate/Desactivate drawing
+    </button>
+    <script type="text/javascript">
+
+      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
+        var options = options || {};
+        // Declare a formatter to read GeoJSON
+        var format = new ol.format.GeoJSON();
+
+        // Read GeoJSON features
+        var features = format.readFeatures(featurecollection, options);
+        return features;
+      }
+
+      // Playground using Q.js promise, see https://github.com/kriskowal/q/wiki/Coming-from-jQuery
+      // For the demo purpose, we don't want to use OpenLayers 3 to make call to geojson files here
+      var callAjax = function (url) {
+        return function() {
+          var d = Q.defer();
+          ajax.getJSON(url, function (res) {
+            d.resolve(res);
+          });
+          return d.promise;
+        }
+      };
+
+      // Create a style function for coloring points
+      var pointStyles = (function() {
+        var defaultStyle = [new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: new ol.style.Fill({color: 'red'}),
+            radius: 3
+          })
+        })];
+        var ruleStyle = [new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: new ol.style.Fill({color: 'yellow'}),
+            radius: 3
+          })
+        })];
+        return function(feature, resolution) {
+          var nearest = feature.get('nearest');
+          if (nearest != undefined && nearest === true) {
+            return ruleStyle;
+          } else {
+            return defaultStyle;
+          }
+        };
+      })();
+
+      // Declare a source for polygons
+      var vectorSourcePoints = new ol.source.GeoJSON();
+
+      var vectorLayerPoints = new ol.layer.Vector({
+        source: vectorSourcePoints,
+        style: pointStyles
+      });
+
+      // Declare a source for drawing
+      var vectorSourceDrawing = new ol.source.GeoJSON();
+      var vectorLayerDrawing = new ol.layer.Vector({
+        source: vectorSourceDrawing
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.MapQuest({
+              layer: 'osm'
+            })
+          }),
+          vectorLayerPoints,
+          vectorLayerDrawing
+        ],
+        view: new ol.View({
+          center: ol.proj.transform([-1.5603, 47.2383], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 10
+        })
+      });
+      // We will share the geojson content to not reload the page 
+      var myPoints;
+
+      callAjax("assets/data/key_shop_with_name_nantes_area.geojson")()
+        .then(function(points_fc) {
+        myPoints = points_fc;
+       
+        vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
+      });
+
+      // Create a button and bind a click function
+      var button = document.getElementById('drawtoggle');
+      var draw;
+      button.onclick = function (e) {
+        var toggleState = this.getAttribute('data-toggle');
+        // Some issues due to type. Can't use !toggleState to go back and forth
+        // between true and false (type not boolean but string)
+        // Remove drawing interaction because
+        if (toggleState === 'true') {
+          this.setAttribute('data-toggle', 'false');
+          map.removeInteraction(draw);
+        } else {
+          this.setAttribute('data-toggle', 'true');
+          // Assign draw interaction (variable created before for scope reason)
+          draw = new ol.interaction.Draw({
+            source: vectorSourceDrawing,
+            type: 'Point'
+          });
+
+          // Bind event on the draw component
+          draw.on('drawend', function (e) {
+            // Remove immediately other features for demo purpose
+            vectorSourceDrawing.clear();
+            var formatDraw = new ol.format.GeoJSON();
+            featureDraw = formatDraw.writeFeature(e.feature.clone(), {
+              dataProjection: 'EPSG:4326',
+              featureProjection: 'EPSG:3857'
+            });
+            vectorSourceDrawing.addFeature(e.feature);
+            console.log(featureDraw);
+            var nearest = turf.nearest(featureDraw, myPoints);
+            var featureId = nearest.properties.osm_id
+            console.log(nearest);
+            // Loop on features
+            vectorSourcePoints.getFeatures().forEach(function (el) {
+               el.set('nearest', false);
+               if (el.get('osm_id') === featureId) {
+                 el.set('nearest', true);
+               }
+            });
+          });
+          // Add the interaction to the map
+          map.addInteraction(draw);
+        }
+      }
+
+    </script>
+    </body>
+</html>
