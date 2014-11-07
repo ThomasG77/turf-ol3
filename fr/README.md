@@ -4,7 +4,7 @@
 
 Le but de ces démos est de vous permettre de découvrir comment faire fonctionner Turf, une bibliothèque JavaScript pouvant fonctionner côté client comme serveur. Ce travail est directement inspiré de la version pour MapBox/Leaflet http://rousseau.io/turf-mapboxjs
 
-Turf a beaucoup de fonctionnalités intéressantes pour crééer des objets GeoJSON, effectuer des opérations spatiales sur ces mêmes objets. Elle permet aussi de faire des statistiques sur les attributs.
+Turf a beaucoup de fonctionnalités intéressantes pour créer des objets GeoJSON, effectuer des opérations spatiales sur ces mêmes objets. Elle permet aussi de faire des statistiques sur les attributs.
 
 ## Une reprise d'idées mais avec une API simplifiée
 
@@ -14,17 +14,17 @@ Même si la bibliothèque est très intéressante, il faut aussi noter que Turf 
 
 * Elle emprunte quelques fonctionnalités à la bibliothèque TOPOJSON de Mike Bostock (le créateur de D3) pour la simplification des objets géométriques.
 
-* Par ailleurs, pour un nombre important de fonctions spatiales, la bibliothèque Turf emprunte les fonctions à JSTS (JavaScript Topology Suite) en cachant de la complexité. JSTS seule est capable de gérer du GeoJSON et d'effectuer des opérations spatiales mais est nettement plus verbeuse que Turf: Elle vient d'un port de la bibliothèque JTS (Java Topology Suite) venant du monde Java.
+* Par ailleurs, pour un nombre important de fonctions spatiales, la bibliothèque Turf emprunte les fonctions à JSTS (JavaScript Topology Suite) en cachant de la complexité. JSTS seule est capable de gérer du GeoJSON et d'effectuer des opérations spatiales mais est nettement plus verbeuse que Turf: Elle vient d'un port de la bibliothèque JTS (JTS Topology Suite) venant du monde Java.
 
-Pour consulter l'arbre de dépendances, allez sur http://www.yasiv.com/npm#view/turf
+Pour consulter l'arbre de dépendances du projet, allez sur http://www.yasiv.com/npm#view/turf
 
 ## Dans quels cas l'utiliser?
 
 Nous pensons que Turf est très utile dans la majorité des cas. Elle permet par exemple de savoir quels magasins sont inclus dans une zone, de mesurer des distances, de voir quelles sont les lieux à 100 mètres de vous en utilisant des tampons,...
 
-Elle présente une API simple même si quelques fois redondante à notre goût. Elle présente aussi l'énorme avantage d'être modulaire. Dans les exemples, nous prenons la bibliothèque "monobloc" mais il est possible de n'inclure que ce que vous utilisez avec le gestionnaire de dépendances de Node JS (NPM).
+Elle présente une API simple même elle parfois trop redondante à notre goût. Elle présente aussi l'énorme avantage d'être modulaire. Dans les exemples, nous prenons la bibliothèque "monobloc" mais il est possible de n'inclure que ce que vous utilisez avec le gestionnaire de dépendances de Node JS (NPM).
 
-Nénamoins, il peut rester quelques cas où il faudra plutôt penser à utiliser JSTS car elle permet des opérations plus complexes liés à la topologie par exemple ou la validité des polygones mais tout le monde n'a pas non plus ce besoin.
+Néanmoins, il peut rester quelques cas où il faudra plutôt penser à utiliser JSTS car elle permet des opérations plus complexes liés à la topologie par exemple ou la validité des polygones mais tout le monde n'a pas non plus ce besoin.
 
 ## Limites liées au cas de OpenLayers 3
 
