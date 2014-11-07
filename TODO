@@ -2,7 +2,6 @@
 
 * distance sample: take the "Centre ville" Nantes neighbourhood center and use modify to move a point to see how far we are from the "Centre ville" 
 * nearest sample: use the same POI points and it's where you click that launch the nearest function call.
-* bboxPolygon sample: create the bbox polygon for Nantes town and another for the agglomeration to see urban sprawling
 * centroid sample: take the center of each Nantes neighbourhood and put them in a new layer
 * center sample: in truth it's the center of gravity (barycentre in maths)
 * square: set a max extent on the demo. Demo can failed because with sync, sometimes out of bounds and failed assertion.
@@ -16,3 +15,52 @@ var Hydda_Full = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x
   maxZoom: 18,
   attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
 });
+
+* General: use ol.FeatureOverlay instead of full layers when drawing http://openlayers.org/en/v3.0.0/apidoc/ol.FeatureOverlay.html
+
+Remains
+
+* [Measurement](measurement/README.md)
+    * [distance](measurement/distance.md)
+    * [envelope](measurement/envelope.md)
+    * [size](measurement/size.md)
+    * [centroid](measurement/centroid.md)
+    * [bearing](measurement/bearing.md)
+    * [destination](measurement/destination.md)
+* [Interpolation](interpolation/README.md)
+    * [tin](interpolation/tin.md)
+    * [grid](interpolation/grid.md)
+    * [hex](interpolation/hex.md)
+    * [planepoint](interpolation/planepoint.md)
+    * [isolines](interpolation/isolines.md)
+    * [isobands](interpolation/isobands.md)
+* [Classification](classification/README.md)
+    * [quantile](classification/quantile.md)
+    * [jenks](classification/jenks.md)
+    * [reclass](classification/reclass.md)
+* [Aggregation](aggregation/aggregation.md)
+    * [average](aggregation/average.md)
+    * [median](aggregation/median.md)
+    * [sum](aggregation/sum.md)
+    * [min](aggregation/min.md)
+    * [max](aggregation/max.md)
+    * [count](aggregation/count.md)
+    * [deviation](aggregation/deviation.md)
+    * [variance](aggregation/variance.md)
+    * [aggregate](aggregation/aggregate.md)
+* [Transformation](transformation/README.md)
+    * [buffer](transformation/buffer.md)
+    * [bezier](transformation/bezier.md)
+    * [simplify](transformation/simplify.md)
+    * [union](transformation/union.md)
+    * [merge](transformation/merge.md)
+    * [intersect](transformation/intersect.md)
+    * [erase](transformation/erase.md)
+    * [donuts](transformation/donuts.md)
+    * [convex](transformation/convex.md)
+    * [concave](transformation/concave.md)
+* [Misc](misc/README.md)
+    * [flip](misc/flip.md)
+    * [explode](misc/explode.md)
+    * [combine](misc/combine.md)
+    * [isClockwise](misc/isClockwise.md)
