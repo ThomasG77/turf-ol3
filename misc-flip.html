@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
+    <script src="assets/ol3/js/ol-debug.js" type="text/javascript"></script>
+    <title>Turf and OpenLayers 3 - flip Feature or FeatureCollection</title>
+  </head>
+  <body>
+    <h2>Flip Feature or FeatureCollection</h2>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+      // Declare a GeoJSON source
+      var geojson_source = new ol.source.GeoJSON({
+        projection: 'EPSG:3857'
+      });
+
+      // Tower of Bretagne without properties declared
+      var pt1 = turf.point(-1.5579479, 47.2175545);
+
+      // Cranes of Nantes with properties defined
+      var pt2 = turf.point(-1.5741021, 47.1991929, {
+        name: 'Grue grise',
+        man_made: 'crane'
+      });
+      var pt3 = turf.point(-1.57007, 47.20507, {
+        name: 'Grue jaune',
+        man_made: 'crane'
+      });
+
+      // Declare a formatter to read GeoJSON
+      var format = new ol.format.GeoJSON();
+
+      // Declare a source
+      var vectorSource = new ol.source.GeoJSON();
+
+      var fc = turf.featurecollection([pt1, pt2, pt3]);
+
+      var flipped = turf.flip(fc);
+
+      // When reading features, reproject to EPSG 3857
+      var features = format.readFeatures(fc, {
+        featureProjection: 'EPSG:3857'
+      });
+      var flipped_features = format.readFeatures(flipped, {
+        featureProjection: 'EPSG:3857'
+      });
+      var all_features = features.concat(flipped_features);
+      // Add features
+      vectorSource.addFeatures(all_features);
+
+      // Declare a vector layer with the already
+      // created source containing added features
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+      });
+
+      var center = [-1.563046, 47.214751].reverse();
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.MapQuest({
+              layer: 'osm'
+            })
+          }),
+          vectorLayer
+        ],
+        view: new ol.View({
+          center: ol.proj.transform(center, 'EPSG:4326', 'EPSG:3857'),
+          zoom: 4
+        })
+      });
+    </script>
+  </body>
+</html>
