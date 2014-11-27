@@ -5,6 +5,9 @@
 * centroid sample: take the center of each Nantes neighbourhood and put them in a new layer
 * center sample: in truth it's the center of gravity (barycentre in maths)
 * square: set a max extent on the demo. Demo can failed because with sync, sometimes out of bounds and failed assertion.
+* concave: issue when some hundred points (too slow, browser go down)
+* buffer: can be slow (issue already in Turf main tracker)
+* flip: issue in demo: mutable
 
 * plugin simplestyle for OpenLayers 3 See https://github.com/mapbox/mapbox.js/blob/5799ab238c2cd4e8126ae1dc577cd802f916e40d/src/simplestyle.js and
 
@@ -22,8 +25,6 @@ Remains
 
 * [Measurement](measurement/README.md)
     * [distance](measurement/distance.md)
-    * [envelope](measurement/envelope.md)
-    * [size](measurement/size.md)
     * [centroid](measurement/centroid.md)
     * [bearing](measurement/bearing.md)
     * [destination](measurement/destination.md)
@@ -49,18 +50,11 @@ Remains
     * [variance](aggregation/variance.md)
     * [aggregate](aggregation/aggregate.md)
 * [Transformation](transformation/README.md)
-    * [buffer](transformation/buffer.md)
-    * [bezier](transformation/bezier.md)
     * [simplify](transformation/simplify.md)
-    * [union](transformation/union.md)
     * [merge](transformation/merge.md)
     * [intersect](transformation/intersect.md)
     * [erase](transformation/erase.md)
     * [donuts](transformation/donuts.md)
-    * [convex](transformation/convex.md)
-    * [concave](transformation/concave.md)
 * [Misc](misc/README.md)
-    * [flip](misc/flip.md)
-    * [explode](misc/explode.md)
     * [combine](misc/combine.md)
     * [isClockwise](misc/isClockwise.md)
