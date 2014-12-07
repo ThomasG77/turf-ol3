@@ -13,7 +13,7 @@
       }
     </style>
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
-    <script src="assets/ol3/js/ol-debug.js" type="text/javascript"></script>
+    <script src="assets/ol3/js/ol.js" type="text/javascript"></script>
     <title>Turf and OpenLayers 3 - Inside</title>
   </head>
   <body>
@@ -50,7 +50,6 @@
           newpts.push(turf.point(x, y));
         }
         var fcrandom = turf.featurecollection(newpts);
-
         return fcrandom;
       }
 
@@ -59,18 +58,29 @@
       var vectorSourcePolygons = new ol.source.GeoJSON();
       var vectorSourceWithin = new ol.source.GeoJSON();
 
-      var defaultStyle = [new ol.style.Style({
+      var defaultStyle = [
+        new ol.style.Style({
           image: new ol.style.Circle({
-            fill: new ol.style.Fill({color: 'red'}),
-            radius: 3
+            stroke: new ol.style.Stroke({
+              color: 'white'
+            }),
+            fill: new ol.style.Fill({
+              color: '#1f6b75'
+            }),
+            radius: 5
           })
-      })];
-
+        })
+      ];
       var withinStyle = [new ol.style.Style({
-          image: new ol.style.Circle({
-            fill: new ol.style.Fill({color: '#0000ff'}),
-            radius: 3
-          })
+        image: new ol.style.Circle({
+          stroke: new ol.style.Stroke({
+            color: 'black'
+          }),
+          fill: new ol.style.Fill({
+            color: 'white'
+          }),
+          radius: 3
+        })
       })];
 
       // Declare vector layers, one for points and the other for the polygons
@@ -88,7 +98,15 @@
       vectorSourcePolygons.addFeatures(polygonFeatures);
 
       var vectorLayerPolygons = new ol.layer.Vector({
-        source: vectorSourcePolygons
+        source: vectorSourcePolygons,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'black',
+              width: 1
+            })
+          })
+        ]
       });
 
       var vectorLayerWithin = new ol.layer.Vector({

@@ -13,7 +13,7 @@
       }
     </style>
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
-    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/ol3/js/ol.js"></script>
     <script src="assets/js/q.js"></script>
     <script src="assets/js/ajax.min.js"></script>
     <title>Turf and OpenLayers 3 - Filter</title>
@@ -56,7 +56,18 @@
       var vectorSourcePolygons = new ol.source.GeoJSON();
 
       var vectorLayerPolygons = new ol.layer.Vector({
-        source: vectorSourcePolygons
+        source: vectorSourcePolygons,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'black',
+              width: 1
+            }),
+            fill: new ol.style.Fill({
+              color: 'white'
+            })
+          })
+        ]
       });
 
       // Instanciate a map and add layers

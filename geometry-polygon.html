@@ -13,7 +13,7 @@
       }
     </style>
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
-    <script src="assets/ol3/js/ol-debug.js" type="text/javascript"></script>
+    <script src="assets/ol3/js/ol.js" type="text/javascript"></script>
     <title>Turf and OpenLayers 3 - add polygon</title>
   </head>
   <body>
@@ -79,7 +79,15 @@
       // Declare a vector layer with the already
       // created source containing added feature
       var vectorLayer = new ol.layer.Vector({
-        source: vectorSource
+        source: vectorSource,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 2
+            })
+          })
+        ]
       });
 
       // Instanciate a map and add layers
