@@ -52,12 +52,28 @@
       var vectorSourcePolygons = new ol.source.GeoJSON();
 
       var vectorLayerPolygons = new ol.layer.Vector({
-        source: vectorSourcePolygons
+        source: vectorSourcePolygons,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 2
+            })
+          })
+        ]
       });
 
       // Declare a vector layer for bboxPolygon
       var vectorLayerBboxPolygon = new ol.layer.Vector({
-        source: new ol.source.GeoJSON()
+        source: new ol.source.GeoJSON(),
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 0, 0, 1],
+              width: 2
+            })
+          })
+        ]
       });
 
       // Instanciate a map and add layers

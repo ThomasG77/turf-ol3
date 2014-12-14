@@ -48,15 +48,16 @@
       // Declare a source for polygons
       var vectorSourcePolygons = new ol.source.GeoJSON();
 
-      var pointsStyle = [new ol.style.Style({
-        image: new ol.style.Circle({
-          fill: new ol.style.Fill({color: 'black'}),
-          radius: 3
-        })
-      })];
-
       var vectorLayerPolygons = new ol.layer.Vector({
-        source: vectorSourcePolygons
+        source: vectorSourcePolygons,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 2
+            })
+          })
+        ]
       });
 
       // Instanciate a map and add layers

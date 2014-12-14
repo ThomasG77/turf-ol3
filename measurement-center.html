@@ -51,15 +51,25 @@
 
       var pointsStyle = [new ol.style.Style({
         image: new ol.style.Circle({
-          fill: new ol.style.Fill({color: 'black'}),
-          radius: 3
+          stroke: new ol.style.Stroke({
+            color: 'white'
+          }),
+          fill: new ol.style.Fill({
+            color: '#1f6b75'
+          }),
+          radius: 5
         })
       })];
 
       var centerStyle = [new ol.style.Style({
         image: new ol.style.Circle({
-          fill: new ol.style.Fill({color: 'red'}),
-          radius: 3
+          stroke: new ol.style.Stroke({
+            color: 'black'
+          }),
+          fill: new ol.style.Fill({
+            color: 'white'
+          }),
+          radius: 7
         })
       })];
 
