@@ -17,7 +17,6 @@
     <title>Turf and OpenLayers 3 - distance</title>
   </head>
   <body>
-    <h2>Distance</h2>
     <div id="map" class="map"></div>
     <script type="text/javascript">
       // Declare a GeoJSON source
@@ -73,7 +72,21 @@
       // Declare a vector layer with the already
       // created source containing added features
       var vectorLayer = new ol.layer.Vector({
-        source: vectorSource
+        source: vectorSource,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'white',
+              width: 5
+            })
+          }),
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 3
+            })
+          })
+        ]
       });
 
       // Instanciate a map and add layers

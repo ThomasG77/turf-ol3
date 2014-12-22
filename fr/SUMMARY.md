@@ -2,16 +2,16 @@
 
 Ceci est la table des matières des examples utilisant Turf avec OpenLayers 3
 
-* [Geometry](geometry/README.md)
+* [Géométrie](geometry/README.md)
     * [point](geometry/point.md)
     * [linestring](geometry/linestring.md)
     * [polygon](geometry/polygon.md)
     * [featurecollection](geometry/featurecollection.md)
-* [Joins](joins/README.md)
+* [Jointures](joins/README.md)
     * [inside](joins/inside.md)
     * [within](joins/within.md)
     * [tag](joins/tag.md)
-* [Data](data/README.md)
+* [Données](data/README.md)
     * [remove](data/remove.md)
     * [filter](data/filter.md)
     * [sample](data/sample.md)

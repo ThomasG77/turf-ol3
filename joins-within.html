@@ -17,7 +17,6 @@
     <title>Turf and OpenLayers 3 - Inside</title>
   </head>
   <body>
-    <h2>Within</h2>
     <div id="map" class="map"></div>
     <button id="drawrandom" data-toggle="false" type="button">
       Add random points on the map extent and change color for points within the existing polygons
@@ -67,19 +66,19 @@
             fill: new ol.style.Fill({
               color: '#1f6b75'
             }),
-            radius: 5
+            radius: 4
           })
         })
       ];
       var withinStyle = [new ol.style.Style({
         image: new ol.style.Circle({
           stroke: new ol.style.Stroke({
-            color: 'black'
-          }),
-          fill: new ol.style.Fill({
             color: 'white'
           }),
-          radius: 3
+          fill: new ol.style.Fill({
+            color: 'black'
+          }),
+          radius: 5
         })
       })];
 

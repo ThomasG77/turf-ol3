@@ -13,11 +13,10 @@
       }
     </style>
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
-    <script src="assets/ol3/js/ol-debug.js" type="text/javascript"></script>
+    <script src="assets/ol3/js/ol.js" type="text/javascript"></script>
     <title>Turf and OpenLayers 3 - midpoint</title>
   </head>
   <body>
-    <h2>Midpoint</h2>
     <div id="map" class="map"></div>
     <script type="text/javascript">
       // Declare a GeoJSON source
@@ -25,20 +24,24 @@
         projection: 'EPSG:3857'
       });
 
+      var x1 = -1.5741021;
+      var y1 = 47.1991929;
       // Cranes of Nantes with properties defined
-      var pt1 = turf.point(-1.5741021, 47.1991929, {
+      var pt1 = turf.point(x1, y1, {
         name: 'Grue grise',
         man_made: 'crane'
       });
 
-      var pt2 = turf.point(-1.57007, 47.20507, {
+      var x2 = -1.57007;
+      var y2 = 47.20507;
+      var pt2 = turf.point(x2, y2, {
         name: 'Grue jaune',
         man_made: 'crane'
       });
 
       var fc = turf.featurecollection([pt1, pt2]);
 
-      var midpoint = turf.midpoint(pt1, pt2)
+      var midPoint = turf.midpoint(pt1, pt2);
 
       // Declare a formatter to read GeoJSON
       var format = new ol.format.GeoJSON();
@@ -53,18 +56,65 @@
       // Add a feature
       vectorSource.addFeatures(features);
 
+      var pointsStyle = [new ol.style.Style({
+        image: new ol.style.Circle({
+          stroke: new ol.style.Stroke({
+            color: 'white'
+          }),
+          fill: new ol.style.Fill({
+            color: '#1f6b75'
+          }),
+          radius: 5
+        })
+      })];
+
+      var midPointStyle = [new ol.style.Style({
+        image: new ol.style.Circle({
+          stroke: new ol.style.Stroke({
+            color: 'white'
+          }),
+          fill: new ol.style.Fill({
+            color: 'black'
+          }),
+          radius: 5
+        })
+      })];
+
       // Declare a vector layer with the already
       // created source containing added features
       var vectorLayer = new ol.layer.Vector({
-        source: vectorSource
+        source: vectorSource,
+        style: pointsStyle
       });
       
       var vectorMidPoint = new ol.layer.Vector({
         source: new ol.source.GeoJSON({
-          object: midpoint,
+          object: midPoint,
           projection: 'EPSG:3857'
-        })
+        }),
+        style: midPointStyle
       });
+
+      var vectorLine = new ol.layer.Vector({
+        source: new ol.source.GeoJSON({
+          object: turf.linestring([[x1, y1], [x2, y2]], {}),
+          projection: 'EPSG:3857'
+        }),
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'white',
+              width: 3
+            })
+          }),
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 1
+            })
+          })
+        ]
+      })
 
       // Instanciate a map and add layers
       var map = new ol.Map({
@@ -75,6 +125,7 @@
               layer: 'osm'
             })
           }),
+          vectorLine,
           vectorLayer,
           vectorMidPoint
         ],

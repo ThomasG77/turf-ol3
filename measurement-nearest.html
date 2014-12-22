@@ -19,7 +19,6 @@
     <title>Turf and OpenLayers 3 - Nearest</title>
   </head>
   <body>
-    <h2>Nearest</h2>
     <div id="map" class="map"></div>
     <button id="drawtoggle" data-toggle="false" type="button">
       Activate/Desactivate drawing
@@ -48,50 +47,27 @@
         }
       };
 
-      // Create a style function for coloring points
-      var pointStyles = (function() {
-        var defaultStyle = [
-          new ol.style.Style({
-            image: new ol.style.Circle({
-              stroke: new ol.style.Stroke({
-                color: 'white'
-              }),
-              fill: new ol.style.Fill({
-                color: '#1f6b75'
-              }),
-              radius: 4
-            })
+      // Style
+      var defaultStyle = [
+        new ol.style.Style({
+          image: new ol.style.Circle({
+            stroke: new ol.style.Stroke({
+              color: 'white'
+            }),
+            fill: new ol.style.Fill({
+              color: '#1f6b75'
+            }),
+            radius: 4
           })
-        ];
-        var ruleStyle = [
-          new ol.style.Style({
-            image: new ol.style.Circle({
-              stroke: new ol.style.Stroke({
-                color: 'white'
-              }),
-              fill: new ol.style.Fill({
-                color: 'black'
-              }),
-              radius: 4
-            })
-          })
-        ];
-        return function(feature, resolution) {
-          var nearest = feature.get('nearest');
-          if (nearest != undefined && nearest === true) {
-            return ruleStyle;
-          } else {
-            return defaultStyle;
-          }
-        };
-      })();
+        })
+      ];
 
       // Declare a source for polygons
       var vectorSourcePoints = new ol.source.GeoJSON();
 
       var vectorLayerPoints = new ol.layer.Vector({
         source: vectorSourcePoints,
-        style: pointStyles
+        style: defaultStyle
       });
 
       // Declare a source for drawing
@@ -129,13 +105,13 @@
               fill: new ol.style.Fill({
                 color: 'black'
               }),
-              radius: 4
+              radius: 5
             })
           })
         ]
       });
 
-      // We will share the geojson content to not reload the page 
+      // We will share the geojson content to be able to use Turf
       var myPoints;
 
       callAjax("assets/data/key_shop_with_name_nantes_area.geojson")()
@@ -153,7 +129,7 @@
       button.onclick = function (e) {
         var toggleState = this.getAttribute('data-toggle');
         // Some issues due to type. Can't use !toggleState to go back and forth
-        // between true and false (type not boolean but string)
+        // between true and false (type is not boolean but a string)
         // Remove drawing interaction because
         if (toggleState === 'true') {
           this.setAttribute('data-toggle', 'false');
@@ -182,11 +158,9 @@
             console.log(nearest);
             // Loop on features
             vectorSourcePoints.getFeatures().forEach(function (el) {
-               // el.set('nearest', false);
                featureOverlay.removeFeature(el)
                if (el.get('osm_id') === featureId) {
                  featureOverlay.addFeature(el);
-                 // el.set('nearest', true);
                }
             });
           });
