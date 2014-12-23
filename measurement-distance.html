@@ -38,7 +38,7 @@
       );
 
       var R = 6378137;
-      var wgs84Sphere= new ol.Sphere(R);
+      var wgs84Sphere = new ol.Sphere(R);
 
       var nb_sections = 20;
       var range = Array.apply(null, Array(nb_sections)).map(function (_, i) {return i;});
@@ -52,7 +52,10 @@
         );
       })
 
+      var distance_ol3_native = wgs84Sphere.haversineDistance(point1, point2);
+
       console.log(distance);
+      console.log(distance_ol3_native);
 
       var line = turf.linestring(line_coordinates, {});
 
