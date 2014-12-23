@@ -25,6 +25,7 @@ Ceci est la table des matières des examples utilisant Turf avec OpenLayers 3
     * [size](measurement/size.md)
     * [center](measurement/center.md)
     * [centroid](measurement/centroid.md)
+    * [point-on-surface](measurement/pointOnSurface.md)
     * [midpoint](measurement/midpoint.md)
     * [bearing](measurement/bearing.md)
     * [destination](measurement/destination.md)
@@ -65,3 +66,4 @@ Ceci est la table des matières des examples utilisant Turf avec OpenLayers 3
     * [explode](misc/explode.md)
     * [combine](misc/combine.md)
     * [isClockwise](misc/isClockwise.md)
+    * [kinks](misc/kinks.md)
