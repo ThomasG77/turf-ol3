@@ -21,6 +21,9 @@ var Hydda_Full = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x
 
 * General: use ol.FeatureOverlay instead of full layers when drawing http://openlayers.org/en/v3.0.0/apidoc/ol.FeatureOverlay.html
 
+getClosestFeatureToCoordinate equivalent to nearest
+jsts "flat" buffer
+
 Remains
 
 * [Measurement](measurement/README.md)
