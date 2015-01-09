@@ -37,7 +37,7 @@
       	'kilometers'
       );
 
-      var R = 6378137;
+      var R = 6378137; // or 6371 * 1000 ? e.g http://www.movable-type.co.uk/scripts/latlong.html
       var wgs84Sphere = new ol.Sphere(R);
 
       var nb_sections = 20;
@@ -52,10 +52,14 @@
         );
       })
 
-      var distance_ol3_native = wgs84Sphere.haversineDistance(point1, point2);
+      var distance_ol3_haversine = wgs84Sphere.haversineDistance(point1, point2);
+
+      var ellipsoid_wgs84 = new ol.Ellipsoid(6378137, 1/298.257223563);
+      var distance_ol3_vincenty = ellipsoid_wgs84.vincentyDistance(point1, point2)
 
       console.log(distance);
-      console.log(distance_ol3_native);
+      console.log(distance_ol3_haversine);
+      console.log(distance_ol3_vincenty);
 
       var line = turf.linestring(line_coordinates, {});
 
