@@ -69,7 +69,7 @@
 
       callAjax("assets/data/agglo_poly_nantes.geojson")()
         .then(function(polys_fc) {
-        console.log('FeatureCollection : ' polys_fc);
+        console.log('FeatureCollection : ', polys_fc);
 
         vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
           featureProjection: 'EPSG:3857'
