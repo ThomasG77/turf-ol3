@@ -37,7 +37,10 @@
       var vectorSource = new ol.source.GeoJSON();
 
       var fc = turf.featurecollection([pt1, pt2, pt3]);
-      var flipped = turf.flip(fc);
+      // turf.flip is mutable, input change when using it, so cloning here
+      var fc_clone = JSON.parse(JSON.stringify(fc));
+
+      var flipped = turf.flip(fc_clone);
 
       // When reading features, reproject to EPSG 3857
       var features = format.readFeatures(fc, {
