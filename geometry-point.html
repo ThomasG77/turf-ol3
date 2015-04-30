@@ -16,14 +16,14 @@
       });
 
       // Tower of Bretagne without properties declared
-      var pt1 = turf.point(-1.5579479, 47.2175545);
+      var pt1 = turf.point([-1.5579479, 47.2175545]);
 
       // Cranes of Nantes with properties defined
-      var pt2 = turf.point(-1.5741021, 47.1991929, {
+      var pt2 = turf.point([-1.5741021, 47.1991929], {
         name: 'Grue grise',
         man_made: 'crane'
       });
-      var pt3 = turf.point(-1.57007, 47.20507, {
+      var pt3 = turf.point([-1.57007, 47.20507], {
         name: 'Grue jaune',
         man_made: 'crane'
       });
@@ -51,7 +51,7 @@
       });
       // Combine together two Array of ol.Feature, just to play and learn
       var pt2_pt3 = feature_pt2.concat(feature_pt3);
-      // Add features to the source. Behind, OpenLayers create a FeatureCollection
+      // Add features to the source
       vectorSource.addFeatures(pt2_pt3);
 
       // Declare a vector layer with the already
@@ -85,7 +85,11 @@
           vectorLayer
         ],
         view: new ol.View({
-          center: ol.proj.transform([-1.563046, 47.214751], 'EPSG:4326', 'EPSG:3857'),
+          center: ol.proj.transform(
+            [-1.563046, 47.214751],
+            'EPSG:4326',
+            'EPSG:3857'
+          ),
           zoom: 13
         })
       });

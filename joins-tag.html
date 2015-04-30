@@ -5,35 +5,15 @@
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
     <script src="assets/ol3/js/ol.js"></script>
+    <script src="assets/ol3/js/helpers.js"></script>
     <script src="assets/js/q.js"></script>
     <script src="assets/js/ajax.min.js"></script>
+    <script src="assets/js/helpers.js"></script>
     <title>Turf and OpenLayers 3 - Tag</title>
   </head>
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
-
-      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
-        var options = options || {};
-        // Declare a formatter to read GeoJSON
-        var format = new ol.format.GeoJSON();
-
-        // Read GeoJSON features
-        var features = format.readFeatures(featurecollection, options);
-        return features;
-      }
-
-      // Playground using Q.js promise, see https://github.com/kriskowal/q/wiki/Coming-from-jQuery
-      // For the demo purpose, we don't want to use OpenLayers 3 to make call to geojson files here
-      var callAjax = function (url) {
-        return function() {
-          var d = Q.defer();
-          ajax.getJSON(url, function (res) {
-            d.resolve(res);
-          });
-          return d.promise;
-        }
-      };
 
       // Declare a source for points and drawing
       var vectorSourcePolygons = new ol.source.GeoJSON();
@@ -83,27 +63,33 @@
           vectorLayerPoints
         ],
         view: new ol.View({
-          center: ol.proj.transform([-1.5603, 47.2383], 'EPSG:4326', 'EPSG:3857'),
+          center: ol.proj.transform(
+            [-1.5603, 47.2383],
+            'EPSG:4326',
+            'EPSG:3857'
+          ),
           zoom: 11
         })
       });
 
       Q.all([
-        callAjax("assets/data/quartiers_nantes.geojson")(),
-        callAjax("assets/data/key_shop_with_name_nantes_area.geojson")()
+        callAjax('assets/data/quartiers_nantes.geojson')(),
+        callAjax('assets/data/key_shop_with_name_nantes_area.geojson')()
       ]).spread(function(polys_fc, points_fc) {
         console.log(polys_fc, points_fc);
-        turf.tag(points_fc, polys_fc, 'nom', 'quartier');
-        
+        var tagged = turf.tag(points_fc, polys_fc, 'nom', 'quartier');
+
         // Set random colors. See Paul Irish post at
         // http://www.paulirish.com/2009/random-hex-color-code-snippets/
         var quartiers = {};
         polys_fc.features.forEach(function(el) {
-          quartiers[el.properties.nom] = '#'+Math.floor(Math.random()*16777215).toString(16);
+          quartiers[el.properties.nom] = '#' + Math.floor(
+            Math.random() * 16777215
+          ).toString(16);
         });
         console.log(quartiers);
         vectorLayerPoints.setStyle(function(feature, resolution) {
-          if(feature.get('quartier')) {
+          if (feature.get('quartier')) {
             if (Object.keys(quartiers).indexOf(feature.get('quartier')) != -1) {
               var randomColor = quartiers[feature.get('quartier')];
               return [new ol.style.Style({
@@ -116,22 +102,21 @@
                   }),
                   radius: 4
                 })
-              })]
+              })];
             }
           } else {
             return pointsStyle;
-          };
+          }
         });
 
         vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
           featureProjection: 'EPSG:3857'
         }));
 
-        console.log(points_fc, JSON.stringify(points_fc));
-        vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
+        console.log(points_fc, JSON.stringify(tagged));
+        vectorSourcePoints.addFeatures(geojsonToFeatures(tagged, {
           featureProjection: 'EPSG:3857'
         }));
-        
       });
     </script>
   </body>

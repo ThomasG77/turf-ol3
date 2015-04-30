@@ -7,35 +7,15 @@
     <script src="assets/ol3/js/ol-debug.js"></script>
     <script src="assets/js/q.js"></script>
     <script src="assets/js/ajax.min.js"></script>
+    <script src="assets/js/helpers.js"></script>
     <title>Turf and OpenLayers 3 - Concave</title>
   </head>
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
 
-      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
-        var options = options || {};
-        // Declare a formatter to read GeoJSON
-        var format = new ol.format.GeoJSON();
-
-        // Read GeoJSON features
-        var features = format.readFeatures(featurecollection, options);
-        return features;
-      }
-
-      // Playground using Q.js promise, see https://github.com/kriskowal/q/wiki/Coming-from-jQuery
-      // For the demo purpose, we don't want to use OpenLayers 3 to make call to geojson files here
-      var callAjax = function (url) {
-        return function() {
-          var d = Q.defer();
-          ajax.getJSON(url, function (res) {
-            d.resolve(res);
-          });
-          return d.promise;
-        }
-      };
-
-      // Declare a source for points and for future convex polygon deduced from them
+      // Declare a source for points and
+      // for future convex polygon deduced from them
       var vectorSourcePoints = new ol.source.GeoJSON();
       var vectorConcavePolygon = new ol.source.GeoJSON();
 
@@ -60,19 +40,23 @@
           vectorLayerConcavePolygon
         ],
         view: new ol.View({
-          center: ol.proj.transform([-1.555493, 47.216151], 'EPSG:4326', 'EPSG:3857'),
+          center: ol.proj.transform(
+            [-1.555493, 47.216151],
+            'EPSG:4326',
+            'EPSG:3857'
+          ),
           zoom: 12
         })
       });
-      
-      callAjax("assets/data/randomConcave.geojson")()
+
+      callAjax('assets/data/randomConcave.geojson')()
         .then(function(points_fc) {
         var hull = turf.concave(points_fc, 1);
-        
+
         console.log(hull);
         vectorConcavePolygon.addFeatures(geojsonToFeatures(hull, {
           featureProjection: 'EPSG:3857'
-        }))
+        }));
 
         vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
           featureProjection: 'EPSG:3857'

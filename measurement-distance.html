@@ -23,16 +23,19 @@
       var point2 = [x2, y2];
 
       var distance = turf.distance(
-      	turf.point(x1, y1),
-      	turf.point(x2, y2),
-      	'kilometers'
+        turf.point(point1),
+        turf.point(point2),
+        'kilometers'
       );
 
       var R = 6378137; // or 6371 * 1000 ? e.g http://www.movable-type.co.uk/scripts/latlong.html
       var wgs84Sphere = new ol.Sphere(R);
 
       var nb_sections = 20;
-      var range = Array.apply(null, Array(nb_sections)).map(function (_, i) {return i;});
+      var range = Array.apply(null, Array(nb_sections))
+        .map(function(_, i) {
+          return i;
+        });
       range.push(nb_sections);
 
       var line_coordinates = range.map(function(el) {
@@ -41,12 +44,18 @@
           point2,
           el * (1 / nb_sections)
         );
-      })
+      });
 
-      var distance_ol3_haversine = wgs84Sphere.haversineDistance(point1, point2);
+      var distance_ol3_haversine = wgs84Sphere.haversineDistance(
+        point1,
+        point2
+      );
 
-      var ellipsoid_wgs84 = new ol.Ellipsoid(6378137, 1/298.257223563);
-      var distance_ol3_vincenty = ellipsoid_wgs84.vincentyDistance(point1, point2)
+      var ellipsoid_wgs84 = new ol.Ellipsoid(6378137, 1 / 298.257223563);
+      var distance_ol3_vincenty = ellipsoid_wgs84.vincentyDistance(
+        point1,
+        point2
+      );
 
       console.log(distance);
       console.log(distance_ol3_haversine);
@@ -99,7 +108,11 @@
           vectorLayer
         ],
         view: new ol.View({
-          center: ol.proj.transform([-35.563046, 47.214751], 'EPSG:4326', 'EPSG:3857'),
+          center: ol.proj.transform(
+            [-35.563046, 47.214751],
+            'EPSG:4326',
+            'EPSG:3857'
+          ),
           zoom: 3
         })
       });

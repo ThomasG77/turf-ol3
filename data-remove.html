@@ -7,6 +7,7 @@
     <script src="assets/ol3/js/ol.js"></script>
     <script src="assets/js/q.js"></script>
     <script src="assets/js/ajax.min.js"></script>
+    <script src="assets/js/helpers.js"></script>
     <title>Turf and OpenLayers 3 - Remove</title>
   </head>
   <body>
@@ -19,28 +20,6 @@
       Add again all the features
     </button>
     <script type="text/javascript">
-
-      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
-        var options = options || {};
-        // Declare a formatter to read GeoJSON
-        var format = new ol.format.GeoJSON();
-
-        // Read GeoJSON features
-        var features = format.readFeatures(featurecollection, options);
-        return features;
-      }
-
-      // Playground using Q.js promise, see https://github.com/kriskowal/q/wiki/Coming-from-jQuery
-      // For the demo purpose, we don't want to use OpenLayers 3 to make call to geojson files here
-      var callAjax = function (url) {
-        return function() {
-          var d = Q.defer();
-          ajax.getJSON(url, function (res) {
-            d.resolve(res);
-          });
-          return d.promise;
-        }
-      };
 
       // Declare a source for polygons
       var vectorSourcePolygons = new ol.source.GeoJSON();
@@ -72,13 +51,17 @@
           vectorLayerPolygons
         ],
         view: new ol.View({
-          center: ol.proj.transform([30.33115, 6.16769], 'EPSG:4326', 'EPSG:3857'),
+          center: ol.proj.transform(
+            [30.33115, 6.16769],
+            'EPSG:4326',
+            'EPSG:3857'
+          ),
           zoom: 3
         })
       });
-      // We will share the geojson content to not reload the page 
+      // We will share the geojson content to not reload the page
       var myLetters;
-      callAjax("assets/data/turf_text_poly.geojson")()
+      callAjax('assets/data/turf_text_poly.geojson')()
       .then(function(polys_fc) {
         myLetters = polys_fc;
 
@@ -89,14 +72,14 @@
 
       // Create a button and bind a click function
       var button = document.getElementById('filter');
-      button.onclick = function (e) {
+      button.onclick = function(e) {
         var inputValueUpper = document.getElementById('letter').value.toUpperCase();
         if (inputValueUpper.match(/^[TURFISAWEOM]$/)) {
           console.log('input');
 
           vectorSourcePolygons.clear();
           var filtered = turf.remove(myLetters, 'letter', inputValueUpper);
-          
+
           vectorSourcePolygons.addFeatures(geojsonToFeatures(filtered, {
             featureProjection: 'EPSG:3857'
           }));
@@ -104,15 +87,15 @@
         } else {
           console.log('Retry, your input is wrong!');
         }
-      }
+      };
       // Create a button and bind a click function
       var button = document.getElementById('reset');
-      button.onclick = function (e) {
+      button.onclick = function(e) {
         vectorSourcePolygons.clear();
         vectorSourcePolygons.addFeatures(geojsonToFeatures(myLetters, {
           featureProjection: 'EPSG:3857'
         }));
-      }
+      };
     </script>
   </body>
 </html>

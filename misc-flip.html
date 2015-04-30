@@ -10,7 +10,6 @@
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
-      
 
       // Declare a GeoJSON source
       var geojson_source = new ol.source.GeoJSON({
@@ -18,14 +17,14 @@
       });
 
       // Tower of Bretagne without properties declared
-      var pt1 = turf.point(-1.5579479, 47.2175545);
+      var pt1 = turf.point([-1.5579479, 47.2175545]);
 
       // Cranes of Nantes with properties defined
-      var pt2 = turf.point(-1.5741021, 47.1991929, {
+      var pt2 = turf.point([-1.5741021, 47.1991929], {
         name: 'Grue grise',
         man_made: 'crane'
       });
-      var pt3 = turf.point(-1.57007, 47.20507, {
+      var pt3 = turf.point([-1.57007, 47.20507], {
         name: 'Grue jaune',
         man_made: 'crane'
       });

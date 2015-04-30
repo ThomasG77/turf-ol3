@@ -4,14 +4,17 @@
     <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
-    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/ol3/js/ol.js"></script>
     <script src="assets/js/q.js"></script>
     <script src="assets/js/ajax.min.js"></script>
     <script src="assets/js/helpers.js"></script>
-    <title>Turf and OpenLayers 3 - Size</title>
+    <title>Turf and OpenLayers 3 - Area</title>
   </head>
   <body>
     <div id="map" class="map"></div>
+    <button id="createbboxpolygon" type="button">
+      Generate random bboxpolygon from existing area
+    </button>
     <script type="text/javascript">
 
       // Declare a source for polygons
@@ -23,7 +26,20 @@
           new ol.style.Style({
             stroke: new ol.style.Stroke({
               color: [0, 121, 88, 1],
-              width: 1
+              width: 2
+            })
+          })
+        ]
+      });
+
+      // Declare a vector layer for bboxPolygon
+      var vectorLayerBboxPolygon = new ol.layer.Vector({
+        source: new ol.source.GeoJSON(),
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 0, 0, 1],
+              width: 2
             })
           })
         ]
@@ -38,7 +54,8 @@
               layer: 'osm'
             })
           }),
-          vectorLayerPolygons
+          vectorLayerPolygons,
+          vectorLayerBboxPolygon
         ],
         view: new ol.View({
           center: ol.proj.transform(
@@ -50,7 +67,7 @@
         })
       });
 
-      callAjax('assets/data/agglo_poly_nantes.geojson')()
+      callAjax('assets/data/quartiers_nantes.geojson')()
         .then(function(polys_fc) {
         console.log(polys_fc);
 
@@ -58,20 +75,24 @@
           featureProjection: 'EPSG:3857'
         }));
 
-        var extent = turf.extent(polys_fc);
-        console.log(extent);
-        var bboxPolygon = turf.bboxPolygon(extent);
-        var bboxPolygonResized = turf.bboxPolygon(turf.size(extent, 1.2));
-
-        vectorSourcePolygons.addFeatures(geojsonToFeatures(bboxPolygon, {
-          featureProjection: 'EPSG:3857'
-        }));
-
-        vectorSourcePolygons.addFeatures(geojsonToFeatures(bboxPolygonResized, {
-          featureProjection: 'EPSG:3857'
-        }));
-
+        // Create a button and bind a click function
+        var button = document.getElementById('createbboxpolygon');
+        var draw;
+        button.onclick = function(e) {
+          var source = vectorLayerBboxPolygon.getSource();
+          source.clear();
+          // Random feature extraction
+          var feature = turf.sample(polys_fc, 1);
+          // Get extent
+          var featureExtent = turf.extent(feature);
+          // Create a GeoJSON reusing the extent
+          var featureBboxPolygon = turf.bboxPolygon(featureExtent);
+          source.addFeatures(geojsonToFeatures(featureBboxPolygon, {
+             featureProjection: 'EPSG:3857'
+          }));
+        };
       });
+
     </script>
   </body>
 </html>

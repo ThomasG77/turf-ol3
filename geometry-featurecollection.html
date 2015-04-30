@@ -16,19 +16,19 @@
       });
 
       // Tower of Bretagne without properties declared
-      var pt1 = turf.point(-1.5579479, 47.2175545);
+      var pt1 = turf.point([-1.5579479, 47.2175545]);
 
       // Cranes of Nantes with properties defined
-      var pt2 = turf.point(-1.5741021, 47.1991929, {
+      var pt2 = turf.point([-1.5741021, 47.1991929], {
         name: 'Grue grise',
         man_made: 'crane'
       });
-      var pt3 = turf.point(-1.57007, 47.20507, {
+      var pt3 = turf.point([-1.57007, 47.20507], {
         name: 'Grue jaune',
         man_made: 'crane'
       });
 
-      var fc = turf.featurecollection([pt1, pt2, pt3])
+      var fc = turf.featurecollection([pt1, pt2, pt3]);
       console.log(fc);
 
       // Declare a source and directly embed the GeoJSON using the
@@ -36,7 +36,7 @@
       var vectorSource = new ol.source.GeoJSON({
         object: fc,
         projection: 'EPSG:3857'
-      })
+      });
 
       // Declare a vector layer with the already
       // created source containing added features

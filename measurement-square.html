@@ -17,22 +17,13 @@
     </style>
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
     <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="assets/js/helpers.js"></script>
     <title>Turf and OpenLayers 3 - Square</title>
   </head>
   <body>
     <div id="map1" class="map"></div>
     <div id="map2" class="map"></div>
     <script type="text/javascript">
-
-      var geojsonToFeatures = function geojsonToFeatures(featurecollection, options) {
-        var options = options || {};
-        // Declare a formatter to read GeoJSON
-        var format = new ol.format.GeoJSON();
-
-        // Read GeoJSON features
-        var features = format.readFeatures(featurecollection, options);
-        return features;
-      }
 
       var map1 = new ol.Map({
         layers: [
@@ -77,7 +68,7 @@
         var result1 = array.map(function(el) {
           var square = turf.square(el);
           return turf.bboxPolygon(square);
-        })
+        });
 
         var result2 = result.concat(result1);
         return result2;
@@ -103,12 +94,12 @@
 
         array_geojson.forEach(function(el) {
           vectorSourcePolygons.addFeatures(geojsonToFeatures(el, options));
-        })
+        });
         return vectorLayerPolygons;
       }
 
-      var bbox_list = create2DimArray(bbox_arr, 14, calculateCoords)
-      var geojson_list = geojsonList(bbox_list)
+      var bbox_list = create2DimArray(bbox_arr, 14, calculateCoords);
+      var geojson_list = geojsonList(bbox_list);
       var vectorLayerPolygons = addBbox(map1, geojson_list, {
         featureProjection: 'EPSG:4326'
       });
@@ -132,15 +123,21 @@
 
       function ptDegM(center, pointResolution) {
         var cosLatitude = Math.cos(goog.math.toRadians(center[1]));
-        var newPointResolution = pointResolution * Math.PI * cosLatitude * ol.sphere.NORMAL.radius / 180;
+        var newPointResolution = pointResolution * Math.PI *
+                                 cosLatitude * ol.sphere.NORMAL.radius / 180;
         return newPointResolution;
       }
 
       function ptMDeg(center, pointResolution) {
-        var cosLatitude = Math.cos(goog.math.toRadians(ol.proj.transform(center, 'EPSG:3857', 'EPSG:4326')[1]));
+        var cosLatitude = Math.cos(
+          goog.math.toRadians(
+            ol.proj.transform(center, 'EPSG:3857', 'EPSG:4326')[1]
+          )
+        );
         var radius = ol.sphere.NORMAL.radius;
-        var newPointResolution = pointResolution * (180 / (Math.PI * cosLatitude * radius));
-        return newPointResolution
+        var newPointResolution = pointResolution *
+                                 (180 / (Math.PI * cosLatitude * radius));
+        return newPointResolution;
       }
 
       map1.getView().bindTo('resolution', map2.getView()).transform(
