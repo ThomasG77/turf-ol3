@@ -2,5 +2,6 @@ _book/
 node_modules/gitbook
 node_modules/ncp
 node_modules/.bin
+node_modules/gh-pages-deploy
 node_modules/gitbook-plugin-include
 !node_module/gitbook-plugin-mydemosamples
