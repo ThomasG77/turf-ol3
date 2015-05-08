@@ -7,5 +7,21 @@
   "dependencies": {
     "gitbook": "^1.1.0",
     "ncp": "^1.0.1"
+  },
+  "scripts": {
+    "start": "",
+    "build": "gitbook build --config book.json",
+    "serve": "gitbook serve --config book.json",
+    "deploy": "./node_modules/.bin/gh-pages-deploy"
+  },
+  "gh-pages-deploy": {
+    "staticpath": "_book",
+    "prep": [
+      "build"
+    ],
+    "noprompt": false
+  },
+  "devDependencies": {
+    "gh-pages-deploy": "^0.3.0"
   }
 }
