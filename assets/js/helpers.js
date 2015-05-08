@@ -28,16 +28,15 @@ var generateRandomPts = function generateRandomPts(ext, num) {
   return fcrandom;
 };
 
-// Playground using Q.js promise, see
-// https://github.com/kriskowal/q/wiki/Coming-from-jQuery
+// Playground using fetch API
 // For the demo purpose, we don't want to use OpenLayers 3
 // to make call to geojson files here
-var callAjax = function(url) {
-  return function() {
-    var d = Q.defer();
-    ajax.getJSON(url, function(res) {
-      d.resolve(res);
+var fetchJSON = function(url) {
+  return fetch(url).then(function(response) {
+      return response.json();
+    }).then(function(json) {
+      return json;
+    }).catch(function(ex) {
+      console.log('parsing failed', ex);
     });
-    return d.promise;
-  }
 };

@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
     <script src="assets/ol3/js/ol-debug.js"></script>
-    <script src="assets/js/q.js"></script>
-    <script src="assets/js/ajax.min.js"></script>
+    <script src="assets/js/es6-promise.min.js"></script>
+    <script src="assets/js/fetch.js"></script>
     <script src="assets/js/helpers.js"></script>
     <title>Turf and OpenLayers 3 - Union</title>
   </head>
@@ -49,7 +49,7 @@
         })
       });
 
-      callAjax('assets/data/union.geojson')()
+      fetchJSON('assets/data/union.geojson')
         .then(function(polygons_fc) {
         console.log(polygons_fc.features);
         var features = polygons_fc.features;

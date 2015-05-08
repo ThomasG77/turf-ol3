@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='https://rawgit.com/Turfjs/turf/master/turf.min.js'></script>
     <script src="assets/ol3/js/ol.js"></script>
-    <script src="assets/js/q.js"></script>
-    <script src="assets/js/ajax.min.js"></script>
+    <script src="assets/js/es6-promise.min.js"></script>
+    <script src="assets/js/fetch.js"></script>
     <script src="assets/js/helpers.js"></script>
     <title>Turf and OpenLayers 3 - Remove</title>
   </head>
@@ -61,7 +61,7 @@
       });
       // We will share the geojson content to not reload the page
       var myLetters;
-      callAjax('assets/data/turf_text_poly.geojson')()
+      fetchJSON('assets/data/turf_text_poly.geojson')
       .then(function(polys_fc) {
         myLetters = polys_fc;
 
