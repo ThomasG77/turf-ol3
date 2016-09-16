@@ -73,7 +73,7 @@
 
       // Create a button and bind a click function
       var button = document.getElementById('filter');
-      button.onclick = function(e) {
+      button.addEventListener('click', function(e) {
         var inputValue = document.getElementById('letter').value;
         if (inputValue.match(/^\d+$/)) {
 
@@ -86,15 +86,15 @@
         } else {
           console.log('The input is invalid!');
         }
-      };
+      });
       // Create a button and bind a click function
-      var button = document.getElementById('reset');
-      button.onclick = function(e) {
+      var reset = document.getElementById('reset');
+      reset.addEventListener('click', function(e) {
         vectorSourcePoints.clear();
         vectorSourcePoints.addFeatures(geojsonToFeatures(myPoints, {
           featureProjection: 'EPSG:3857'
         }));
-      }
+      })
     </script>
   </body>
 </html>
