@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="http://openlayers.org/en/v3.18.2/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <style type="text/css">
+      #length {
+        width: 300px;
+      }
+    </style>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
+<!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
+    <script src="http://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="http://openlayers.org/en/v3.18.2/build/ol.js"></script>
+    <title>Turf and OpenLayers 3 - Along</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <input id="length" type="text" name="input" placeholder="Set distance from Nantes (in kilometers)">
+    <button id="validate" type="button">Validate</button>
+    <script type="text/javascript">
+      var geojson;
+      var length = document.getElementById('length');
+      var button = document.getElementById('validate');
+      button.addEventListener('click', function(e) {
+        var inputValue = length.value;
+        if (inputValue.match(/^\d+$/)) {
+          var along = turf.along(geojson.features[0], +inputValue, 'kilometers');
+          console.log(along);
+          var featuresPt = (new ol.format.GeoJSON()).readFeatures(along, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857'
+          });
+          vectorLayerPoint.getSource().clear();
+          vectorLayerPoint.getSource().addFeatures(featuresPt);
+        } else {
+          console.log('The input is invalid!');
+        }
+      });
+
+      // Declare an empty layer for point
+      var vectorLayerPoint = new ol.layer.Vector({
+        source: new ol.source.Vector()
+      });
+
+      // Declare an empty layer for a line
+      var vectorLayerLine = new ol.layer.Vector({
+        source: new ol.source.Vector(),
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'white',
+              width: 5
+            })
+          }),
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: '#007cc3',
+              width: 3
+            })
+          })
+        ]
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayerLine,
+          vectorLayerPoint
+        ],
+        view: new ol.View({
+          center: ol.proj.transform(
+            [3.768, 48.879],
+            'EPSG:4326',
+            'EPSG:3857'
+          ),
+          zoom: 6
+        })
+      });
+
+      fetch('assets/data/from-nantes-to-bruxelles-osrm.geojson').then(function(response) {
+        return response.json();
+      }).then(function(json) {
+        // To expose the geojson content to the outside
+        geojson = json;
+        // Serialize features from GeoJSON to array of ol.Feature
+        var features = (new ol.format.GeoJSON()).readFeatures(json, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857'
+        });
+        // Add features to the line layer source
+        vectorLayerLine.getSource().addFeatures(features);
+      }).catch(function(ex) {
+        console.log('parsing failed', ex);
+      });
+    </script>
+  </body>
+</html>
