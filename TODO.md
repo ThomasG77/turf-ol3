@@ -96,7 +96,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
 * ASSERTIONS
   * [ ] featureOf (1)
   * [ ] collectionOf (1)
-  * [ ] bbox
+  * [x] bbox
   * [ ] circle (1)
   * [ ] geojsonType (1)
   * [ ] propReduce (1)

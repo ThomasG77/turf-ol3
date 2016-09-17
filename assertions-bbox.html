@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js"></script>
+    <script src="assets/js/es6-promise.min.js"></script>
+    <script src="assets/js/fetch.js"></script>
+    <script src="assets/js/helpers.js"></script>
+    <title>Turf and OpenLayers 3 - Assertion bbox</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <button id="zoomtobboxpolygon" type="button">
+      Zoom randomly on a bbox from existing polygon area
+    </button>
+    <script type="text/javascript">
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      // Declare a source for polygons
+      var vectorSourcePolygons = new ol.source.Vector();
+
+      var vectorLayerPolygons = new ol.layer.Vector({
+        source: vectorSourcePolygons,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 2
+            })
+          })
+        ]
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayerPolygons
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([-1.5603, 47.2383]),
+          zoom: 11
+        })
+      });
+
+      fetchJSON('assets/data/quartiers_nantes.geojson')
+        .then(function(polys_fc) {
+        console.log(polys_fc);
+
+        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
+
+        // Create a button and bind a click function
+        var button = document.getElementById('zoomtobboxpolygon');
+        var draw;
+        button.addEventListener('click', function(e) {
+          // Random feature extraction
+          var features = vectorLayerPolygons.getSource().getFeatures();
+          var feat = features[getRandomInt(0, features.length - 1)];
+          // Serialize the feature to GeoJSON
+          var geojson_string = (new ol.format.GeoJSON()).writeFeature(feat);
+          // Zoom to bbox extent (EPSG 3857) using Turf
+          map.getView().fit(turf.bbox(JSON.parse(geojson_string)), map.getSize());
+          // Simpler way replacing above line using built-in OpenLayers library
+          // map.getView().fit(feat.getGeometry(), map.getSize());
+        });
+      });
+
+    </script>
+  </body>
+</html>
