@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js"></script>
+    <title>Turf and OpenLayers 3 - Kinks</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+
+      var polygon = {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [1.7578125, 49.38237278700955],
+              [-3.779296875, 46.86019101567027],
+              [-0.87890625, 43.83452678223682],
+              [6.064453125, 42.68243539838623],
+              [4.306640625, 44.33956524809713],
+              [0.87890625, 42.35854391749705],
+              [-1.7578125, 41.11246878918088],
+              [-5.44921875, 43.89789239125797],
+              [0.087890625, 45.583289756006316],
+              [0.615234375, 47.338822694822],
+              [-2.28515625, 48.28319289548349],
+              [-3.8671874999999996, 49.724479188712984],
+              [-0.3515625, 50.736455137010665],
+              [1.7578125, 49.38237278700955]
+            ]
+          ]
+        }
+      }
+
+      var kinks = turf.kinks(polygon);
+
+      // Declare a source
+      var vectorSource = new ol.source.Vector();
+
+      // When reading feature, reproject to EPSG 3857
+      var feature = (new ol.format.GeoJSON()).readFeature(polygon, {
+        featureProjection: 'EPSG:3857'
+      });
+      // Add a feature
+      vectorSource.addFeature(feature);
+
+      // When reading feature, reproject to EPSG 3857
+      var kinks_features = (new ol.format.GeoJSON()).readFeatures(kinks, {
+        featureProjection: 'EPSG:3857'
+      });
+      // Add a feature
+      vectorSource.addFeatures(kinks_features);
+
+      // Declare a vector layer with the already
+      // created source containing added feature
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([4.0297, 45.7598]),
+          zoom: 5
+        })
+      });
+
+    </script>
+  </body>
+</html>
