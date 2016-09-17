@@ -1,48 +1,29 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
-    <script src="assets/ol3/js/ol.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
     <title>Turf and OpenLayers 3 - flip Feature or FeatureCollection</title>
   </head>
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
 
-      // Declare a GeoJSON source
-      var geojson_source = new ol.source.GeoJSON({
-        projection: 'EPSG:3857'
-      });
-
       // Tower of Bretagne without properties declared
       var pt1 = turf.point([-1.5579479, 47.2175545]);
-
-      // Cranes of Nantes with properties defined
-      var pt2 = turf.point([-1.5741021, 47.1991929], {
-        name: 'Grue grise',
-        man_made: 'crane'
-      });
-      var pt3 = turf.point([-1.57007, 47.20507], {
-        name: 'Grue jaune',
-        man_made: 'crane'
-      });
 
       // Declare a formatter to read GeoJSON
       var format = new ol.format.GeoJSON();
 
       // Declare a source
-      var vectorSource = new ol.source.GeoJSON();
+      var vectorSource = new ol.source.Vector();
 
-      var fc = turf.featurecollection([pt1, pt2, pt3]);
-      // turf.flip is mutable, input change when using it, so cloning here
-      var fc_clone = JSON.parse(JSON.stringify(fc));
-
-      var flipped = turf.flip(fc_clone);
+      var flipped = turf.flip(pt1);
 
       // When reading features, reproject to EPSG 3857
-      var features = format.readFeatures(fc, {
+      var features = format.readFeatures(pt1, {
         featureProjection: 'EPSG:3857'
       });
       var flipped_features = format.readFeatures(flipped, {
@@ -58,8 +39,6 @@
         source: vectorSource
       });
 
-      var center = [-1.563046, 47.214751].reverse();
-
       // Instanciate a map and add layers
       var map = new ol.Map({
         target: 'map',
@@ -70,7 +49,7 @@
           vectorLayer
         ],
         view: new ol.View({
-          center: ol.proj.transform(center, 'EPSG:4326', 'EPSG:3857'),
+          center: ol.proj.fromLonLat([47.214751, -1.563046]),
           zoom: 2
         })
       });
