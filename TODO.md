@@ -78,7 +78,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [ ] tin
 * JOINS
   * [x] inside
-  * [ ] tag
+  * [x] tag
 * GRIDS
   * [ ] hexGrid
   * [ ] pointGrid
