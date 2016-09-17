@@ -71,7 +71,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [ ] geometryCollection
 * DATA
   * [ ] random
-  * [ ] sample
+  * [x] sample
 * INTERPOLATION
   * [ ] isolines
   * [ ] planepoint
