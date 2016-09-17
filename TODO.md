@@ -38,7 +38,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [x] centroid
   * [ ] destination
   * [x] distance
-  * [ ] envelope
+  * [x] envelope
   * [ ] lineDistance
   * [x] midpoint
   * [ ] pointOnSurface
