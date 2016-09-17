@@ -45,7 +45,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [ ] square
 * TRANSFORMATION
   * [ ] bezier
-  * [ ] buffer
+  * [x] buffer
   * [ ] concave
   * [ ] convex
   * [ ] difference
