@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
+    <title>Turf and OpenLayers 3 - difference</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+
+      var coordinates1 = [[[-3.6474609374999996,48.1367666796927],[1.9335937499999998,50.51342652633956],[7.4267578125,48.777912755501845],[6.1962890625,46.437856895024204],[7.250976562499999,43.644025847699496],[5.9326171875,43.16512263158296],[3.955078125,43.48481212891603],[2.8125,42.74701217318067],[0.5712890625,42.779275360241904],[-1.6259765625,43.389081939117496],[-1.0986328125,45.55252525134013],[-2.1533203125,47.100044694025215],[-3.515625,47.78363463526376],[-3.6474609374999996,48.1367666796927]]];
+      var polygon1 = turf.polygon(coordinates1);
+
+      var coordinates2 = [[[-0.52734375,47.040182144806664],[2.28515625,48.28319289548349],[3.1640625,46.830133640447386],[1.845703125,45.706179285330855],[-0.52734375,47.040182144806664]]];
+      var polygon2 = turf.polygon(coordinates2);
+
+      var intersect1 = turf.intersect(polygon1, polygon2);
+
+      var coordinates3 = [[[-2.021484375,34.66935854524543],[-1.142578125,32.175612478499325],[-8.876953125,27.761329874505233],[-8.96484375,26.27371402440643],[-11.865234375,25.48295117535531],[-13.0078125,21.69826549685252],[-17.314453125,21.12549763660628],[-13.623046875,27.449790329784214],[-10.1953125,29.305561325527698],[-9.4921875,31.728167146023935],[-8.349609375,33.358061612778876],[-5.80078125,35.67514743608467],[-2.021484375,34.66935854524543]]];
+      var polygon3 = turf.polygon(coordinates3);
+
+      var coordinates4 = [[[-7.998046875,27.137368359795584],[-11.77734375,27.449790329784214],[-15.380859374999998,22.43134015636061],[-15.380859374999998,19.31114335506464],[-11.953125,18.646245142670608],[-8.26171875,22.836945920943855],[-7.998046875,27.137368359795584]]];
+      var polygon4 = turf.polygon(coordinates4);
+
+      var intersect2 = turf.intersect(polygon3, polygon4);
+
+      // Declare a formatter to read GeoJSON
+      var format = new ol.format.GeoJSON();
+
+      // Declare a source
+      var vectorSource = new ol.source.Vector();
+
+      // When reading feature, reproject to EPSG 3857
+      var feature1 = format.readFeature(intersect1, {
+        featureProjection: 'EPSG:3857'
+      });
+      // Add a feature
+      vectorSource.addFeature(feature1);
+
+      // When reading feature, reproject to EPSG 3857
+      var feature2 = format.readFeature(intersect2, {
+        featureProjection: 'EPSG:3857'
+      });
+
+      // Add a feature
+      vectorSource.addFeature(feature2);
+
+      // Declare a vector layer with the already
+      // created source containing added feature
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 2
+            }),
+            fill: new ol.style.Fill({
+              color: [0, 0, 88, 0.6]
+            })
+          })
+        ]
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([-3, 35]),
+          zoom: 3
+        })
+      });
+    </script>
+  </body>
+</html>
