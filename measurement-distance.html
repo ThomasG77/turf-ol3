@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
-    <script src="assets/ol3/js/ol-debug.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
     <title>Turf and OpenLayers 3 - distance</title>
   </head>
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
       // Declare a GeoJSON source
-      var geojson_source = new ol.source.GeoJSON({
+      var geojson_source = new ol.source.Vector({
         projection: 'EPSG:3857'
       });
 
@@ -28,46 +28,13 @@
         'kilometers'
       );
 
-      var R = 6378137; // or 6371 * 1000 ? e.g http://www.movable-type.co.uk/scripts/latlong.html
-      var wgs84Sphere = new ol.Sphere(R);
-
-      var nb_sections = 20;
-      var range = Array.apply(null, Array(nb_sections))
-        .map(function(_, i) {
-          return i;
-        });
-      range.push(nb_sections);
-
-      var line_coordinates = range.map(function(el) {
-        return wgs84Sphere.interpolate(
-          point1,
-          point2,
-          el * (1 / nb_sections)
-        );
-      });
-
-      var distance_ol3_haversine = wgs84Sphere.haversineDistance(
-        point1,
-        point2
-      );
-
-      var ellipsoid_wgs84 = new ol.Ellipsoid(6378137, 1 / 298.257223563);
-      var distance_ol3_vincenty = ellipsoid_wgs84.vincentyDistance(
-        point1,
-        point2
-      );
-
-      console.log(distance);
-      console.log(distance_ol3_haversine);
-      console.log(distance_ol3_vincenty);
-
-      var line = turf.linestring(line_coordinates, {});
+      var line = turf.lineString([point1, point2], { distance: distance});
 
       // Declare a formatter to read GeoJSON
       var format = new ol.format.GeoJSON();
 
       // Declare a source
-      var vectorSource = new ol.source.GeoJSON();
+      var vectorSource = new ol.source.Vector();
 
       // When reading feature, reproject to EPSG 3857
       var feature = format.readFeature(line, {
@@ -80,20 +47,30 @@
       // created source containing added features
       var vectorLayer = new ol.layer.Vector({
         source: vectorSource,
-        style: [
-          new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: 'white',
-              width: 5
-            })
-          }),
-          new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: [0, 121, 88, 1],
-              width: 3
-            })
-          })
-        ]
+        style: (function() {
+          return function(feature, resolution) {
+            console.log(feature);
+                  return [
+                    new ol.style.Style({
+                      stroke: new ol.style.Stroke({
+                        color: 'white',
+                        width: 5
+                      })
+                    }),
+                    new ol.style.Style({
+                      stroke: new ol.style.Stroke({
+                        color: [0, 121, 88, 1],
+                        width: 3
+                      }),
+                      text: new ol.style.Text({
+                        font: '12px Calibri,sans-serif',
+                        text: '' + Math.round(feature.get('distance'), 0) + 'kilometers',
+                        offsetY: -15
+                      })
+                    })
+                  ];
+                }
+              })()
       });
 
       // Instanciate a map and add layers
