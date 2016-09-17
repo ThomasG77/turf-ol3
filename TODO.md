@@ -88,17 +88,19 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
 * CLASSIFICATION
   * [x] nearest
 * META
-  * [ ] propEach
-  * [ ] coordEach
-  * [ ] coordReduce
-  * [ ] featureEach
-  * [ ] getCoord
+  * [ ] propEach (1)
+  * [ ] coordEach (1)
+  * [ ] coordReduce (1)
+  * [ ] featureEach (1)
+  * [ ] getCoord (1)
 * ASSERTIONS
-  * [ ] featureOf
-  * [ ] collectionOf
+  * [ ] featureOf (1)
+  * [ ] collectionOf (1)
   * [ ] bbox
-  * [ ] circle
-  * [ ] geojsonType
-  * [ ] propReduce
-  * [ ] coordAll
+  * [ ] circle (1)
+  * [ ] geojsonType (1)
+  * [ ] propReduce (1)
+  * [ ] coordAll (1)
   * [ ] tesselate
+
+(1) Not in default turf.min.js
