@@ -86,7 +86,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [ ] triangleGrid
   * [ ] within
 * CLASSIFICATION
-  * [ ] nearest
+  * [x] nearest
 * META
   * [ ] propEach
   * [ ] coordEach
