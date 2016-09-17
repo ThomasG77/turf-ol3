@@ -42,7 +42,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [x] lineDistance
   * [x] midpoint
   * [x] pointOnSurface
-  * [ ] square
+  * [x] square
 * TRANSFORMATION
   * [x] bezier
   * [x] buffer
@@ -93,8 +93,6 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [ ] coordReduce (1) (turf-meta)
   * [ ] featureEach (1) (turf-meta)
   * [ ] getCoord (1) (turf-invariant => wrong in the doc?)
-  * Missing in the doc but present in turf-meta library
-    * coordAll
 * ASSERTIONS
   * [ ] featureOf (1) (turf-invariant)
   * [ ] collectionOf (1) (turf-invariant)
