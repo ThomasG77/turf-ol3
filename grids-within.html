@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
+    <script src="assets/js/helpers.js"></script>
+    <title>Turf and OpenLayers 3 - Inside</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <button id="drawrandom" data-toggle="false" type="button">
+      Add random points on the map extent and change color for points within the existing polygons
+    </button>
+    <script type="text/javascript">
+
+      // Declare a source for points and drawing
+      var vectorSource = new ol.source.Vector();
+      var vectorSourcePolygons = new ol.source.Vector();
+      var vectorSourceWithin = new ol.source.Vector();
+
+      var defaultStyle = [
+        new ol.style.Style({
+          image: new ol.style.Circle({
+            stroke: new ol.style.Stroke({
+              color: 'white'
+            }),
+            fill: new ol.style.Fill({
+              color: '#1f6b75'
+            }),
+            radius: 4
+          })
+        })
+      ];
+      var withinStyle = [new ol.style.Style({
+        image: new ol.style.Circle({
+          stroke: new ol.style.Stroke({
+            color: 'white'
+          }),
+          fill: new ol.style.Fill({
+            color: 'red'
+          }),
+          radius: 5
+        })
+      })];
+
+      // Declare vector layers, one for points and the other for the polygons
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: defaultStyle
+      });
+
+      // Polygon features
+      var polygon1 = turf.polygon([
+        [
+          [-1.7316180541992188,47.30445882505168],
+          [-1.7405444458007813,47.262070785836954],
+          [-1.7419177368164063,47.23503651044928],
+          [-1.7377978637695313,47.206122543028584],
+          [-1.7247515991210935,47.1958589577099],
+          [-1.708958752441406,47.18652670260539],
+          [-1.6636401489257815,47.17719280650937],
+          [-1.6396075561523438,47.18092656186937],
+          [-1.6100817993164063,47.18792664548329],
+          [-1.6011554077148438,47.205656059497386],
+          [-1.6025286987304685,47.22711005616932],
+          [-1.6052752807617188,47.25181802982138],
+          [-1.6162616088867188,47.26999201033513],
+          [-1.6251880004882813,47.2839677502279],
+          [-1.6389209106445313,47.29840547025651],
+          [-1.6588336303710935,47.305390048887205],
+          [-1.6766864135742185,47.30818362196655],
+          [-1.6883593872070313,47.30818362196655],
+          [-1.7103320434570313,47.30678685388196],
+          [-1.7316180541992188,47.30445882505168]
+        ]
+      ]);
+      var polygon2 = turf.polygon([
+        [
+          [-1.468632824707031,47.25135194828732],
+          [-1.4995318725585935,47.231772819903426],
+          [-1.5173846557617185,47.20892135806855],
+          [-1.5194445922851563,47.18699335433382],
+          [-1.5091449096679688,47.178592995538594],
+          [-1.4995318725585935,47.17485907607565],
+          [-1.4816790893554688,47.1753258303676],
+          [-1.468632824707031,47.17999314764472],
+          [-1.4452868774414063,47.193992637966375],
+          [-1.421940930175781,47.21032071020829],
+          [-1.3896685913085938,47.234104047945976],
+          [-1.3622027709960938,47.24902147909046],
+          [-1.3484698608398438,47.26766236147151],
+          [-1.3313037231445313,47.28909126331797],
+          [-1.3278704956054685,47.30073376566307],
+          [-1.3326770141601563,47.30771803670615],
+          [-1.3443499877929688,47.313304789159105],
+          [-1.355336315917969,47.3119081564104],
+          [-1.3676959350585938,47.30818362196655],
+          [-1.390355236816406,47.29700844379795],
+          [-1.4130145385742188,47.28350195170239],
+          [-1.4370471313476563,47.27185565559816],
+          [-1.4597064331054685,47.25880876062516],
+          [-1.468632824707031,47.25135194828732]
+        ]
+      ]);
+      var fcPolygons = turf.featureCollection([polygon1, polygon2]);
+
+      var polygonFeatures = geojsonToFeatures(fcPolygons, {
+        featureProjection: 'EPSG:3857'
+      });
+      vectorSourcePolygons.addFeatures(polygonFeatures);
+
+      var vectorLayerPolygons = new ol.layer.Vector({
+        source: vectorSourcePolygons,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'black',
+              width: 1
+            })
+          })
+        ]
+      });
+
+      var vectorLayerWithin = new ol.layer.Vector({
+        source: vectorSourceWithin,
+        style: withinStyle
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer,
+          vectorLayerPolygons,
+          vectorLayerWithin
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([-1.5603, 47.2383]),
+          zoom: 11
+        })
+      });
+
+      // Create a button and bind a click function
+      var button = document.getElementById('drawrandom');
+      var draw;
+      button.onclick = function(e) {
+        // Generate and add random features
+        vectorSource.clear();
+        var pointsGeojson = turf.random('point', 50, {
+          bbox: ol.proj.transformExtent(map.getView().calculateExtent(map.getSize()), 'EPSG:3857', 'EPSG:4326')
+        });
+        var newfeatures = geojsonToFeatures(pointsGeojson, {
+          featureProjection: 'EPSG:3857'
+        });
+        vectorSource.addFeatures(newfeatures);
+
+        vectorSourceWithin.clear();
+        var geojsonWithin = turf.within(pointsGeojson, fcPolygons);
+        vectorSourceWithin.addFeatures(geojsonToFeatures(geojsonWithin, {
+          featureProjection: 'EPSG:3857'
+        }));
+      }
+    </script>
+  </body>
+</html>
