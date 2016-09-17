@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
-    <script src="assets/ol3/js/ol.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js"></script>
     <script src="assets/js/es6-promise.min.js"></script>
     <script src="assets/js/fetch.js"></script>
     <script src="assets/js/helpers.js"></script>
@@ -16,9 +16,11 @@
       Generate random bboxpolygon from existing area
     </button>
     <script type="text/javascript">
-
+      function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
       // Declare a source for polygons
-      var vectorSourcePolygons = new ol.source.GeoJSON();
+      var vectorSourcePolygons = new ol.source.Vector();
 
       var vectorLayerPolygons = new ol.layer.Vector({
         source: vectorSourcePolygons,
@@ -34,7 +36,7 @@
 
       // Declare a vector layer for bboxPolygon
       var vectorLayerBboxPolygon = new ol.layer.Vector({
-        source: new ol.source.GeoJSON(),
+        source: new ol.source.Vector(),
         style: [
           new ol.style.Style({
             stroke: new ol.style.Stroke({
@@ -76,19 +78,20 @@
         // Create a button and bind a click function
         var button = document.getElementById('createbboxpolygon');
         var draw;
-        button.onclick = function(e) {
+        button.addEventListener('click', function(e) {
           var source = vectorLayerBboxPolygon.getSource();
           source.clear();
           // Random feature extraction
-          var feature = turf.sample(polys_fc, 1);
+          var features = vectorLayerPolygons.getSource().getFeatures();
+          var feat = features[getRandomInt(0, features.length - 1)];
           // Get extent
-          var featureExtent = turf.extent(feature);
+          var featureExtent = ol.proj.transformExtent(feat.getGeometry().getExtent(), 'EPSG:3857', 'EPSG:4326');
           // Create a GeoJSON reusing the extent
           var featureBboxPolygon = turf.bboxPolygon(featureExtent);
           source.addFeatures(geojsonToFeatures(featureBboxPolygon, {
              featureProjection: 'EPSG:3857'
           }));
-        };
+        });
       });
 
     </script>
