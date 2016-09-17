@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
+    <script src="assets/js/helpers.js"></script>
+    <title>Turf and OpenLayers 3 - Random</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <button id="drawrandom" data-toggle="false" type="button">
+      Add random polygons on the map extent
+    </button>
+    <script type="text/javascript">
+
+      // Declare a source for random polygons
+      var vectorSourcePolygons = new ol.source.Vector();
+
+      var vectorLayerPolygons = new ol.layer.Vector({
+        source: vectorSourcePolygons,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'black',
+              width: 1
+            })
+          })
+        ]
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayerPolygons
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([-1.5603, 47.2383]),
+          zoom: 11
+        })
+      });
+
+      // Create a button and bind a click function
+      var button = document.getElementById('drawrandom');
+      var draw;
+      button.addEventListener('click', function(e) {
+        // Generate and add random features
+        vectorSourcePolygons.clear();
+        var pointsGeojson = turf.random('polygons', 50, {
+          bbox: ol.proj.transformExtent(map.getView().calculateExtent(map.getSize()), 'EPSG:3857', 'EPSG:4326'),
+          max_radial_length: 0.01
+        });
+        console.log(pointsGeojson);
+        var newfeatures = geojsonToFeatures(pointsGeojson, {
+          featureProjection: 'EPSG:3857'
+        });
+        vectorSourcePolygons.addFeatures(newfeatures);
+      });
+    </script>
+  </body>
+</html>
