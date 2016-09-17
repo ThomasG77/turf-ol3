@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
-    <script src="assets/ol3/js/ol-debug.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js"></script>
     <script src="assets/js/es6-promise.min.js"></script>
     <script src="assets/js/fetch.js"></script>
     <script src="assets/js/helpers.js"></script>
@@ -16,8 +16,8 @@
 
       // Declare a source for points and
       // for future convex polygon deduced from them
-      var vectorSourcePoints = new ol.source.GeoJSON();
-      var vectorConvexPolygon = new ol.source.GeoJSON();
+      var vectorSourcePoints = new ol.source.Vector();
+      var vectorConvexPolygon = new ol.source.Vector();
 
       var vectorLayerPoints = new ol.layer.Vector({
         source: vectorSourcePoints
@@ -38,11 +38,7 @@
           vectorLayerConvexPolygon
         ],
         view: new ol.View({
-          center: ol.proj.transform(
-            [-1.5603, 47.2383],
-            'EPSG:4326',
-            'EPSG:3857'
-          ),
+          center: ol.proj.fromLonLat([-1.5603, 47.2383]),
           zoom: 10
         })
       });
