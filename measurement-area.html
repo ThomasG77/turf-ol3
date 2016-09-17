@@ -59,7 +59,7 @@
           return initial + turf.area(feature);
         }, 0);
         if (total_surface > 0) {
-          surface.innerHTML = 'The selected area is ' + Math.round(total_surface, 0) + ' square meters';
+          surface.innerHTML = 'The selected area is ' + Math.round(total_surface) + ' square meters';
         } else {
           surface.innerHTML = not_selected;
         }
