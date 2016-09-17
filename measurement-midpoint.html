@@ -1,17 +1,17 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
-    <script src="assets/ol3/js/ol.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
     <title>Turf and OpenLayers 3 - midpoint</title>
   </head>
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
       // Declare a GeoJSON source
-      var geojson_source = new ol.source.GeoJSON({
+      var geojson_source = new ol.source.Vector({
         projection: 'EPSG:3857'
       });
 
@@ -30,7 +30,7 @@
         man_made: 'crane'
       });
 
-      var fc = turf.featurecollection([pt1, pt2]);
+      var fc = turf.featureCollection([pt1, pt2]);
 
       var midPoint = turf.midpoint(pt1, pt2);
 
@@ -38,7 +38,7 @@
       var format = new ol.format.GeoJSON();
 
       // Declare a source
-      var vectorSource = new ol.source.GeoJSON();
+      var vectorSource = new ol.source.Vector();
 
       // When reading feature, reproject to EPSG 3857
       var features = format.readFeatures(fc, {
@@ -79,16 +79,24 @@
       });
 
       var vectorMidPoint = new ol.layer.Vector({
-        source: new ol.source.GeoJSON({
-          object: midPoint,
+        source: new ol.source.Vector({
+          features: (new ol.format.GeoJSON()).readFeatures(
+            midPoint, {
+              featureProjection: 'EPSG:3857'
+            }
+          ),
           projection: 'EPSG:3857'
         }),
         style: midPointStyle
       });
 
       var vectorLine = new ol.layer.Vector({
-        source: new ol.source.GeoJSON({
-          object: turf.linestring([[x1, y1], [x2, y2]], {}),
+        source: new ol.source.Vector({
+          features: (new ol.format.GeoJSON()).readFeatures(
+            turf.lineString([[x1, y1], [x2, y2]], {}), {
+              featureProjection: 'EPSG:3857'
+            }
+          ),
           projection: 'EPSG:3857'
         }),
         style: [

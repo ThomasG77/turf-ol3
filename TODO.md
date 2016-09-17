@@ -40,7 +40,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [ ] distance
   * [ ] envelope
   * [ ] lineDistance
-  * [ ] midpoint
+  * [x] midpoint
   * [ ] pointOnSurface
   * [ ] square
 * TRANSFORMATION
