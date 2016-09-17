@@ -101,6 +101,6 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [ ] geojsonType (1)
   * [ ] propReduce (1)
   * [ ] coordAll (1)
-  * [ ] tesselate
+  * [x] tesselate
 
 (1) Not in default turf.min.js
