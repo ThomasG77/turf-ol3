@@ -25,96 +25,80 @@ getClosestFeatureToCoordinate equivalent to nearest
 jsts "flat" buffer
 midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.LineString.prototype.getFlatMidpoint
 
-Remains
+## Status
 
-* [Measurement](measurement/README.md)
-    * [bearing](measurement/bearing.md)
-    * [destination](measurement/destination.md)
-* [Interpolation](interpolation/README.md)
-    * [tin](interpolation/tin.md)
-    * [grid](interpolation/grid.md)
-    * [hex](interpolation/hex.md)
-    * [planepoint](interpolation/planepoint.md)
-    * [isolines](interpolation/isolines.md)
-    * [isobands](interpolation/isobands.md)
-* [Classification](classification/README.md)
-    * [quantile](classification/quantile.md)
-    * [jenks](classification/jenks.md)
-    * [reclass](classification/reclass.md)
-* [Aggregation](aggregation/aggregation.md)
-    * [average](aggregation/average.md)
-    * [median](aggregation/median.md)
-    * [sum](aggregation/sum.md)
-    * [min](aggregation/min.md)
-    * [max](aggregation/max.md)
-    * [count](aggregation/count.md)
-    * [deviation](aggregation/deviation.md)
-    * [variance](aggregation/variance.md)
-    * [aggregate](aggregation/aggregate.md)
-* [Transformation](transformation/README.md)
-    * [simplify](transformation/simplify.md)
-    * [merge](transformation/merge.md)
-    * [intersect](transformation/intersect.md)
-    * [erase](transformation/erase.md)
-    * [donuts](transformation/donuts.md)
-* [Misc](misc/README.md)
-    * [combine](misc/combine.md)
-    * [isClockwise](misc/isClockwise.md)
-
-
-
-* [Measurement](measurement/README.md)
-    * [distance](measurement/distance.md)
-    * [distance](measurement/area.md)
-    * [nearest](measurement/nearest.md)
-    * [bboxPolygon](measurement/bboxPolygon.md)
-    * [envelope](measurement/envelope.md)
-    * [extent](measurement/extent.md)
-    * [square](measurement/square.md)
-    * [size](measurement/size.md)
-    * [center](measurement/center.md)
-    * [centroid](measurement/centroid.md)
-    * [point-on-surface](measurement/pointOnSurface.md)
-    * [midpoint](measurement/midpoint.md)
-    * [bearing](measurement/bearing.md)
-    * [destination](measurement/destination.md)
-    * [lineDistance](measurement/lineDistance.md)
-    * [along](measurement/along.md)
-* [Interpolation](interpolation/README.md)
-    * [tin](interpolation/tin.md)
-    * [grid](interpolation/grid.md)
-    * [hex](interpolation/hex.md)
-    * [planepoint](interpolation/planepoint.md)
-    * [isolines](interpolation/isolines.md)
-    * [isobands](interpolation/isobands.md)
-* [Classification](classification/README.md)
-    * [quantile](classification/quantile.md)
-    * [jenks](classification/jenks.md)
-    * [reclass](classification/reclass.md)
-* [Aggregation](aggregation/aggregation.md)
-    * [average](aggregation/average.md)
-    * [median](aggregation/median.md)
-    * [sum](aggregation/sum.md)
-    * [min](aggregation/min.md)
-    * [max](aggregation/max.md)
-    * [count](aggregation/count.md)
-    * [deviation](aggregation/deviation.md)
-    * [variance](aggregation/variance.md)
-    * [aggregate](aggregation/aggregate.md)
-* [Transformation](transformation/README.md)
-    * [buffer](transformation/buffer.md)
-    * [bezier](transformation/bezier.md)
-    * [simplify](transformation/simplify.md)
-    * [union](transformation/union.md)
-    * [merge](transformation/merge.md)
-    * [intersect](transformation/intersect.md)
-    * [erase](transformation/erase.md)
-    * [donuts](transformation/donuts.md)
-    * [convex](transformation/convex.md)
-    * [concave](transformation/concave.md)
-* [Misc](misc/README.md)
-    * [flip](misc/flip.md)
-    * [explode](misc/explode.md)
-    * [combine](misc/combine.md)
-    * [isClockwise](misc/isClockwise.md)
-    * [kinks](misc/kinks.md)
+* AGGREGATION
+  * [x] collect
+* MEASUREMENT
+  * [x] along
+  * [x] area
+  * [ ] bboxPolygon
+  * [ ] bearing
+  * [ ] center
+  * [ ] centroid
+  * [ ] destination
+  * [ ] distance
+  * [ ] envelope
+  * [ ] lineDistance
+  * [ ] midpoint
+  * [ ] pointOnSurface
+  * [ ] square
+* TRANSFORMATION
+  * [ ] bezier
+  * [ ] buffer
+  * [ ] concave
+  * [ ] convex
+  * [ ] difference
+  * [ ] intersect
+  * [ ] simplify
+  * [ ] union
+* MISC
+  * [ ] combine
+  * [ ] explode
+  * [ ] flip
+  * [ ] kinks
+  * [ ] lineSlice
+  * [ ] pointOnLine
+* HELPER
+  * [ ] featureCollection
+  * [ ] feature
+  * [ ] lineString
+  * [ ] multiLineString
+  * [ ] point
+  * [ ] polygon
+  * [ ] multiPoint
+  * [ ] multiPolygon
+  * [ ] geometryCollection
+* DATA
+  * [ ] random
+  * [ ] sample
+* INTERPOLATION
+  * [ ] isolines
+  * [ ] planepoint
+  * [ ] tin
+  * [ ] JOINS
+  * [ ] inside
+  * [ ] tag
+* GRIDS
+  * [ ] hexGrid
+  * [ ] pointGrid
+  * [ ] squareGrid
+  * [ ] triangleGrid
+  * [ ] within
+* CLASSIFICATION
+  * [ ] nearest
+* META
+  * [ ] propEach
+  * [ ] coordEach
+  * [ ] coordReduce
+  * [ ] featureEach
+  * [ ] getCoord
+* ASSERTIONS
+  * [ ] featureOf
+  * [ ] collectionOf
+  * [ ] bbox
+  * [ ] circle
+  * [ ] geojsonType
+  * [ ] propReduce
+  * [ ] coordAll
+  * [ ] tesselate
