@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="assets/ol3/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
-    <script src="assets/ol3/js/ol.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js"></script>
     <script src="assets/js/es6-promise.min.js"></script>
     <script src="assets/js/fetch.js"></script>
     <script src="assets/js/helpers.js"></script>
@@ -12,13 +12,13 @@
   </head>
   <body>
     <div id="map" class="map"></div>
-    <button id="createbboxpolygon" type="button">
-      Generate random bboxpolygon from existing area
-    </button>
+    <div id="surface"></div>
     <script type="text/javascript">
-
+      var surface = document.getElementById('surface');
+      var not_selected = 'No surface has been selected!';
+      surface.innerHTML = not_selected;
       // Declare a source for polygons
-      var vectorSourcePolygons = new ol.source.GeoJSON();
+      var vectorSourcePolygons = new ol.source.Vector();
 
       var vectorLayerPolygons = new ol.layer.Vector({
         source: vectorSourcePolygons,
@@ -32,19 +32,6 @@
         ]
       });
 
-      // Declare a vector layer for bboxPolygon
-      var vectorLayerBboxPolygon = new ol.layer.Vector({
-        source: new ol.source.GeoJSON(),
-        style: [
-          new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: [0, 0, 0, 1],
-              width: 2
-            })
-          })
-        ]
-      });
-
       // Instanciate a map and add layers
       var map = new ol.Map({
         target: 'map',
@@ -52,8 +39,7 @@
           new ol.layer.Tile({
             source: new ol.source.OSM()
           }),
-          vectorLayerPolygons,
-          vectorLayerBboxPolygon
+          vectorLayerPolygons
         ],
         view: new ol.View({
           center: ol.proj.transform(
@@ -64,31 +50,28 @@
           zoom: 11
         })
       });
+      var select = new ol.interaction.Select();
+      select.on('select', function(e) {
+        var geojson = (new ol.format.GeoJSON()).writeFeatures(select.getFeatures().getArray(), {
+          featureProjection: 'EPSG:3857'
+        });
+        var total_surface = JSON.parse(geojson).features.reduce(function(initial, feature) {
+          return initial + turf.area(feature);
+        }, 0);
+        if (total_surface > 0) {
+          surface.innerHTML = 'The selected area is ' + Math.round(total_surface, 0) + ' square meters';
+        } else {
+          surface.innerHTML = not_selected;
+        }
+      });
+      map.addInteraction(select);
 
       fetchJSON('assets/data/quartiers_nantes.geojson')
         .then(function(polys_fc) {
         console.log(polys_fc);
-
         vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
           featureProjection: 'EPSG:3857'
         }));
-
-        // Create a button and bind a click function
-        var button = document.getElementById('createbboxpolygon');
-        var draw;
-        button.onclick = function(e) {
-          var source = vectorLayerBboxPolygon.getSource();
-          source.clear();
-          // Random feature extraction
-          var feature = turf.sample(polys_fc, 1);
-          // Get extent
-          var featureExtent = turf.extent(feature);
-          // Create a GeoJSON reusing the extent
-          var featureBboxPolygon = turf.bboxPolygon(featureExtent);
-          source.addFeatures(geojsonToFeatures(featureBboxPolygon, {
-             featureProjection: 'EPSG:3857'
-          }));
-        };
       });
 
     </script>
