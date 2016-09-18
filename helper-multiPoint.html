@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
+    <title>Turf and OpenLayers 3 - Helper multiPoint</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+
+      var multi = turf.multiPoint([
+        [-1.5579479, 47.2175545],
+        [-1.5741021, 47.1991929],
+        [-1.57007, 47.20507]
+      ]);
+
+      // Declare a formatter to read GeoJSON
+      var format = new ol.format.GeoJSON();
+
+      // Declare a source
+      var vectorSource = new ol.source.Vector();
+
+      // When reading feature, reproject to EPSG 3857
+      var feature = format.readFeature(multi, {
+        featureProjection: 'EPSG:3857'
+      });
+      // Add a feature
+      vectorSource.addFeature(feature);
+
+      // Declare a vector layer with the already
+      // created source containing added features
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: [
+          new ol.style.Style({
+            image: new ol.style.Circle({
+              stroke: new ol.style.Stroke({
+                color: 'white'
+              }),
+              fill: new ol.style.Fill({
+                color: '#1f6b75'
+              }),
+              radius: 5
+            })
+          })
+        ]
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([-1.563046, 47.214751]),
+          zoom: 13
+        })
+      });
+    </script>
+  </body>
+</html>
