@@ -53,7 +53,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [x] simplify
   * [x] union
 * MISC
-  * [ ] combine
+  * [x] combine
   * [x] explode
   * [x] flip
   * [x] kinks

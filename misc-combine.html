@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src='//cdnjs.cloudflare.com/ajax/libs/Turf.js/3.0.14/turf.min.js'></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js"></script>
+    <script src="assets/js/es6-promise.min.js"></script>
+    <script src="assets/js/fetch.js"></script>
+    <script src="assets/js/helpers.js"></script>
+    <title>Turf and OpenLayers 3 - combine</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <button id="switchlayer" type="button">Show sovereignty</button>
+    <script type="text/javascript">
+
+      // Declare a source for polygons
+      var vectorSourcePolygons = new ol.source.Vector();
+
+      var vectorLayerPolygons = new ol.layer.Vector({
+        source: vectorSourcePolygons,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 2
+            })
+          })
+        ]
+      });
+
+      var select = new ol.interaction.Select();
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayerPolygons
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([-1.5603, 47.2383]),
+          zoom: 2
+        })
+      });
+      map.addInteraction(select);
+      var multis = ['MultiPoint', 'MultiLineString', 'MultiPolygon'];
+      var polygons;
+      fetchJSON('assets/data/countries.json')
+        .then(function(polys_fc) {
+        polygons = polys_fc;
+        var groups = polys_fc.features.reduce(function(prev, curr) {
+          var key = curr.properties.SOVEREIGNT;
+          if (Object.keys(prev).indexOf(key) === -1) {
+            prev[key] = [];
+          }
+          // We split Multi because turf.combine need
+          // Point, LineString or Polygon for input
+          if (multis.indexOf(curr.geometry.type) !== -1) {
+            var featuresArray = curr.geometry.coordinates.map(function(coord) {
+              return {
+                "type": "Feature",
+                "properties": curr.properties,
+                "geometry": {
+                  "type": curr.geometry.type.replace('Multi', ''),
+                  "coordinates": coord
+                }
+              };
+            });
+            prev[key] = prev[key].concat(featuresArray);
+          } else {
+            prev[key].push(curr);
+          }
+          return prev;
+        }, {});
+
+        var multiPolyFeatures = [];
+        for (k in groups) {
+            var featureCollectionMulti = turf.combine(turf.featureCollection(groups[k]));
+            var props = featureCollectionMulti.features[0].properties;
+            props.collectedProperties[0].parts = props.collectedProperties.length;
+            props = props.collectedProperties[0];
+            featureCollectionMulti.features[0].properties = props;
+            multiPolyFeatures.push(featureCollectionMulti.features[0]);
+        }
+        multiPolyFeatures.sort(function(a, b) {
+          return b.properties.parts - a.properties.parts;
+        });
+        geojsonBySovereignty = turf.featureCollection(multiPolyFeatures);
+
+        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+          featureProjection: 'EPSG:3857'
+        }));
+
+      });
+      var button = document.getElementById('switchlayer');
+      button.addEventListener('click', function(e) {
+        if (this.innerHTML === 'Show sovereignty') {
+          this.innerHTML = 'Show countries';
+          vectorSourcePolygons.clear();
+          vectorSourcePolygons.addFeatures(geojsonToFeatures(geojsonBySovereignty, {
+            featureProjection: 'EPSG:3857'
+          }));
+        } else {
+          this.innerHTML = 'Show sovereignty';
+          vectorSourcePolygons.clear();
+          vectorSourcePolygons.addFeatures(geojsonToFeatures(polygons, {
+            featureProjection: 'EPSG:3857'
+          }));
+        }
+      });
+    </script>
+  </body>
+</html>
