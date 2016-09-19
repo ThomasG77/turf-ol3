@@ -5,7 +5,7 @@
   "author": "Thomas Gratier",
   "license": "MIT",
   "dependencies": {
-    "gitbook": "^1.1.0",
+    "gitbook": "^1.5.0",
     "ncp": "^1.0.1"
   },
   "scripts": {
