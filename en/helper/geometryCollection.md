@@ -3,6 +3,5 @@
 <iframe src="../../helper-geometryCollection.html" width="770" height="500" frameBorder="0" seamless="seamless">
 </iframe>
 
-```html
-{{ ../helper-geometryCollection.html }}
-```
+[include](../../helper-geometryCollection.html)
+

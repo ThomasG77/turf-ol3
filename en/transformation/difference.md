@@ -3,6 +3,5 @@
 <iframe src="../../transformation-difference.html" width="770" height="500" frameBorder="0" seamless="seamless">
 </iframe>
 
-```html
-{{ ../transformation-difference.html }}
-```
+[include](../../transformation-difference.html)
+

@@ -3,6 +3,5 @@
 <iframe src="../../transformation-intersect.html" width="770" height="500" frameBorder="0" seamless="seamless">
 </iframe>
 
-```html
-{{ ../transformation-intersect.html }}
-```
+[include](../../transformation-intersect.html)
+

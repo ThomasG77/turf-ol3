@@ -3,6 +3,5 @@
 <iframe src="../../joins-within.html" width="770" height="500" frameBorder="0" seamless="seamless">
 </iframe>
 
-```html
-{{ ../joins-within.html }}
-```
+[include](../../joins-within.html)
+
