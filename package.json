@@ -4,12 +4,8 @@
   "description": "Just a demo for OpenLayers 3 with Turf",
   "author": "Thomas Gratier",
   "license": "MIT",
-  "dependencies": {
-    "gitbook": "^3.2.0",
-    "ncp": "^1.0.1"
-  },
+  "dependencies": {},
   "scripts": {
-    "start": "",
     "build": "gitbook build --config book.json && cp *.html _book/ && cp -r assets _book/",
     "serve": "gitbook serve --config book.json",
     "deploy": "./node_modules/.bin/gh-pages-deploy"
@@ -22,6 +18,8 @@
     "noprompt": false
   },
   "devDependencies": {
-    "gh-pages-deploy": "^0.3.0"
+    "gh-pages-deploy": "^0.3.0",
+    "gitbook": "^3.2.0",
+    "gitbook-cli": "^2.3.0"
   }
 }
