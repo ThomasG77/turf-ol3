@@ -63,7 +63,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [x] featureCollection
   * [x] feature
   * [x] lineString
-  * [ ] multiLineString
+  * [x] multiLineString
   * [x] point
   * [x] polygon
   * [x] multiPoint
