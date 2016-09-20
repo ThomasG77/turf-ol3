@@ -81,7 +81,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [x] tag
 * GRIDS
   * [x] hexGrid
-  * [ ] pointGrid
+  * [x] pointGrid
   * [ ] squareGrid
   * [ ] triangleGrid
   * [x] within
