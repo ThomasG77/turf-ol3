@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src="//npmcdn.com/@turf/turf@3.5.1/turf.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
+    <title>Turf and OpenLayers 3 - Helper multiPolygon</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+
+      // Cantine numérique, a coworking space in Nantes, France
+      var coordinates = [
+        [[
+          [-1.5516916, 47.2120376],
+          [-1.5516754, 47.2120167],
+          [-1.551732, 47.211996],
+          [-1.551731, 47.211994],
+          [-1.551672, 47.2119135],
+          [-1.551621, 47.211844],
+          [-1.551351, 47.211931],
+          [-1.551272, 47.211957],
+          [-1.551192, 47.211983],
+          [-1.551053, 47.212028],
+          [-1.55098, 47.212054],
+          [-1.550902, 47.212083],
+          [-1.55095, 47.212157],
+          [-1.550958, 47.212154],
+          [-1.550954, 47.212148],
+          [-1.55111, 47.212092],
+          [-1.5511215, 47.2121064],
+          [-1.551147, 47.212138],
+          [-1.551117, 47.212143],
+          [-1.551113, 47.212131],
+          [-1.551046, 47.212142],
+          [-1.55105, 47.212153],
+          [-1.551002, 47.212161],
+          [-1.551028, 47.212238],
+          [-1.551184, 47.212183],
+          [-1.551201, 47.212204],
+          [-1.5512059, 47.2122115],
+          [-1.5516572, 47.2120498],
+          [-1.5516916, 47.2120376]
+        ]]
+      ];
+      var polygon = turf.multiPolygon(coordinates, {
+        'name': 'La Cantine Numérique',
+        'amenity': 'coworking_space',
+        'url': 'cantine-nantes.org'
+      });
+
+      // Declare a formatter to read GeoJSON
+      var format = new ol.format.GeoJSON();
+
+      // Declare a source
+      var vectorSource = new ol.source.Vector();
+
+      // When reading feature, reproject to EPSG 3857
+      var feature = format.readFeature(polygon, {
+        featureProjection: 'EPSG:3857'
+      });
+      // Add a feature
+      vectorSource.addFeature(feature);
+
+      // Declare a vector layer with the already
+      // created source containing added feature
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 2
+            })
+          })
+        ]
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([-1.55131, 47.21204]),
+          zoom: 18
+        })
+      });
+    </script>
+  </body>
+</html>
