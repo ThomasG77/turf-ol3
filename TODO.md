@@ -33,7 +33,7 @@ midpoint exists also in OpenLayers 3 > ol.Sphere.prototype.midpoint and ol.geom.
   * [x] along
   * [x] area
   * [x] bboxPolygon
-  * [ ] bearing
+  * [x] bearing
   * [x] center
   * [x] centroid
   * [ ] destination
