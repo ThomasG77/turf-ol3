@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
+    <script src="//npmcdn.com/@turf/turf@3.5.1/turf.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
+    <title>Turf and OpenLayers 3 - destination</title>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <div id="destination"></div>
+    <script type="text/javascript">
+
+      var x1 = -1.57007;
+      var y1 = 47.20507;
+      var pt1 = turf.point([x1, y1], {
+        name: 'Grue jaune',
+        man_made: 'crane'
+      });
+
+      var distance = 200;
+      var bearing = 67.2424;
+      var destination = turf.destination(pt1, distance, bearing, 'kilometers');
+
+      var x2 = destination.geometry.coordinates[0];
+      var y2 = destination.geometry.coordinates[1];
+
+      var fc = turf.featureCollection([pt1, destination]);
+
+      // Declare a source
+      var vectorSource = new ol.source.Vector();
+
+      // When reading feature, reproject to EPSG 3857
+      var features = (new ol.format.GeoJSON()).readFeatures(fc, {
+        featureProjection: 'EPSG:3857'
+      });
+      // Add a feature
+      vectorSource.addFeatures(features);
+
+      var pointsStyle = [new ol.style.Style({
+        image: new ol.style.Circle({
+          stroke: new ol.style.Stroke({
+            color: 'white'
+          }),
+          fill: new ol.style.Fill({
+            color: '#1f6b75'
+          }),
+          radius: 5
+        })
+      })];
+
+      // Declare a vector layer with the already
+      // created source containing added features
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: pointsStyle
+      });
+
+      var vectorLine = new ol.layer.Vector({
+        source: new ol.source.Vector({
+          features: (new ol.format.GeoJSON()).readFeatures(
+            turf.lineString([[x1, y1], [x2, y2]], {}), {
+              featureProjection: 'EPSG:3857'
+            }
+          ),
+          projection: 'EPSG:3857'
+        }),
+        style: [
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: 'white',
+              width: 3
+            })
+          }),
+          new ol.style.Style({
+            stroke: new ol.style.Stroke({
+              color: [0, 121, 88, 1],
+              width: 1
+            })
+          })
+        ]
+      });
+
+      // Instanciate a map and add layers
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLine,
+          vectorLayer
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([-1.571456, 47.202561]),
+          zoom: 15
+        })
+      });
+
+      map.getView().fit(vectorLine.getSource().getFeatures()[0].getGeometry(), map.getSize());
+
+      var destinationElement = document.getElementById('destination');
+      destinationElement.innerHTML = 'Considering a bearing of ' + bearing + ' degrees and a distance of ' + distance + ' kilometers from longitude ' + x1 + ' and latitude ' + y1 + ', the point coordinates are ' + Math.round(x2 * 100000) / 100000; + ' and ' + Math.round(y2 * 100000) / 100000;
+
+    </script>
+  </body>
+</html>
