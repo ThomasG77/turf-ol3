@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script src="//npmcdn.com/@turf/turf@3.5.1/turf.min.js"></script>
+    <script src="assets/js/turf-meta.js"></script>
+    <title>Turf - Meta propEach</title>
+  </head>
+  <body>
+    In fact, there are not need of OpenLayers here.
+    <script type="text/javascript">
+
+      var geojsonObject = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{'araar': 72727},"geometry":{"type":"Polygon","coordinates":[[[22.148437499999996,26.745610382199022],[-9.140625,36.31512514748051],[4.921875,48.69096039092549],[8.0859375,48.69096039092549],[20.7421875,37.71859032558816],[23.203125,39.095962936305476],[71.3671875,30.14512718337613],[22.148437499999996,26.745610382199022]]]}},{"type":"Feature","properties":{gsgsgs: 6262},"geometry":{"type":"Polygon","coordinates":[[[37.6171875,50.51342652633956],[35.5078125,43.32517767999296],[53.4375,41.50857729743935],[52.734375,46.07323062540835],[37.6171875,50.51342652633956]]]}}]}
+
+      turf.meta.propEach(geojsonObject, function(props) {
+        console.log(props);
+      });
+
+      // Could be replaced with
+      function propEach(geojson, callback) {
+        if (geojson.type == 'FeatureCollection') {
+          return geojson.features.forEach(function(props) {
+            return callback(props.properties);
+          });
+        } else {
+          return callback(geojson.properties);
+        }
+      }
+
+      propEach(geojsonObject, function(props) {
+        console.log(Object.keys(props));
+      });
+
+    </script>
+  </body>
+</html>
