@@ -66,12 +66,13 @@
       });
       map.addInteraction(select);
 
-      fetchJSON('assets/data/quartiers_nantes.geojson')
-        .then(function(polys_fc) {
-        console.log(polys_fc);
-        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
+      fetch('assets/data/quartiers_nantes.geojson').then(function(response) {
+        return response.json().then(function(polys_fc) {
+          console.log(polys_fc);
+          vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+            featureProjection: 'EPSG:3857'
+          }));
+        });
       });
 
     </script>

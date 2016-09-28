@@ -49,52 +49,52 @@
       map.addInteraction(select);
       var multis = ['MultiPoint', 'MultiLineString', 'MultiPolygon'];
       var polygons;
-      fetchJSON('assets/data/countries.json')
-        .then(function(polys_fc) {
-        polygons = polys_fc;
-        var groups = polys_fc.features.reduce(function(prev, curr) {
-          var key = curr.properties.SOVEREIGNT;
-          if (Object.keys(prev).indexOf(key) === -1) {
-            prev[key] = [];
-          }
-          // We split Multi because turf.combine need
-          // Point, LineString or Polygon for input
-          if (multis.indexOf(curr.geometry.type) !== -1) {
-            var featuresArray = curr.geometry.coordinates.map(function(coord) {
-              return {
-                "type": "Feature",
-                "properties": curr.properties,
-                "geometry": {
-                  "type": curr.geometry.type.replace('Multi', ''),
-                  "coordinates": coord
-                }
-              };
-            });
-            prev[key] = prev[key].concat(featuresArray);
-          } else {
-            prev[key].push(curr);
-          }
-          return prev;
-        }, {});
+      fetch('assets/data/countries.json').then(function(response) {
+        return response.json().then(function(polys_fc) {
+          polygons = polys_fc;
+          var groups = polys_fc.features.reduce(function(prev, curr) {
+            var key = curr.properties.SOVEREIGNT;
+            if (Object.keys(prev).indexOf(key) === -1) {
+              prev[key] = [];
+            }
+            // We split Multi because turf.combine need
+            // Point, LineString or Polygon for input
+            if (multis.indexOf(curr.geometry.type) !== -1) {
+              var featuresArray = curr.geometry.coordinates.map(function(coord) {
+                return {
+                  "type": "Feature",
+                  "properties": curr.properties,
+                  "geometry": {
+                    "type": curr.geometry.type.replace('Multi', ''),
+                    "coordinates": coord
+                  }
+                };
+              });
+              prev[key] = prev[key].concat(featuresArray);
+            } else {
+              prev[key].push(curr);
+            }
+            return prev;
+          }, {});
 
-        var multiPolyFeatures = [];
-        for (k in groups) {
-            var featureCollectionMulti = turf.combine(turf.featureCollection(groups[k]));
-            var props = featureCollectionMulti.features[0].properties;
-            props.collectedProperties[0].parts = props.collectedProperties.length;
-            props = props.collectedProperties[0];
-            featureCollectionMulti.features[0].properties = props;
-            multiPolyFeatures.push(featureCollectionMulti.features[0]);
-        }
-        multiPolyFeatures.sort(function(a, b) {
-          return b.properties.parts - a.properties.parts;
+          var multiPolyFeatures = [];
+          for (k in groups) {
+              var featureCollectionMulti = turf.combine(turf.featureCollection(groups[k]));
+              var props = featureCollectionMulti.features[0].properties;
+              props.collectedProperties[0].parts = props.collectedProperties.length;
+              props = props.collectedProperties[0];
+              featureCollectionMulti.features[0].properties = props;
+              multiPolyFeatures.push(featureCollectionMulti.features[0]);
+          }
+          multiPolyFeatures.sort(function(a, b) {
+            return b.properties.parts - a.properties.parts;
+          });
+          geojsonBySovereignty = turf.featureCollection(multiPolyFeatures);
+
+          vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+            featureProjection: 'EPSG:3857'
+          }));
         });
-        geojsonBySovereignty = turf.featureCollection(multiPolyFeatures);
-
-        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
-
       });
       var button = document.getElementById('switchlayer');
       button.addEventListener('click', function(e) {

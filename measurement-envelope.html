@@ -48,22 +48,22 @@
         })
       });
 
-      fetchJSON('assets/data/agglo_poly_nantes.geojson')
-        .then(function(polys_fc) {
-        console.log('FeatureCollection : ', polys_fc);
+      fetch('assets/data/agglo_poly_nantes.geojson').then(function(response) {
+        return response.json().then(function(polys_fc) {
+          console.log('FeatureCollection : ', polys_fc);
 
-        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
+          vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+            featureProjection: 'EPSG:3857'
+          }));
 
-        // It returns a GeoJSON Feature
-        var envelope = turf.envelope(polys_fc);
-        console.log('Envelope : ', envelope);
+          // It returns a GeoJSON Feature
+          var envelope = turf.envelope(polys_fc);
+          console.log('Envelope : ', envelope);
 
-        vectorSourcePolygons.addFeatures(geojsonToFeatures(envelope, {
-          featureProjection: 'EPSG:3857'
-        }));
-
+          vectorSourcePolygons.addFeatures(geojsonToFeatures(envelope, {
+            featureProjection: 'EPSG:3857'
+          }));
+        });
       });
     </script>
   </body>

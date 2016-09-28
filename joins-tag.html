@@ -67,11 +67,15 @@
       });
 
       Promise.all([
-        fetchJSON('assets/data/quartiers_nantes.geojson', function(json) {
-          return json;
+        fetch('assets/data/quartiers_nantes.geojson').then(function(response) {
+          return response.json().then(function(json) {
+            return json;
+          });
         }),
-        fetchJSON('assets/data/key_shop_with_name_nantes_area.geojson', function(json) {
-          return json;
+        fetch('assets/data/key_shop_with_name_nantes_area.geojson').then(function(response) {
+          return response.json().then(function(json) {
+            return json;
+          });
         })
       ]).then(function(returned) {
         var polys_fc = returned[0];

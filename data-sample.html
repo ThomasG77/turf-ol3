@@ -62,13 +62,14 @@
       // We will share the geojson content to not reload the page
       var myPoints;
 
-      fetchJSON('assets/data/key_shop_with_name_nantes_area.geojson')
-        .then(function(points_fc) {
-        myPoints = points_fc;
+      fetch('assets/data/key_shop_with_name_nantes_area.geojson').then(function(response) {
+        return response.json().then(function(points_fc) {
+          myPoints = points_fc;
 
-        vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
+          vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
+            featureProjection: 'EPSG:3857'
+          }));
+        });
       });
 
       // Create a button and bind a click function

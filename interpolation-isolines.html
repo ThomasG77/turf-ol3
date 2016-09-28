@@ -39,20 +39,21 @@
         })
       });
 
-      fetchJSON('assets/data/france_meteo.geojson')
-        .then(function(points_fc) {
-        var breaks = [
-          990, 992, 994, 996, 998,
-          1000, 1002, 1004, 1006, 1008,
-          1010, 1012, 1014, 1016, 1018,
-          1020, 1022, 1024, 1026, 1028,
-          1030, 1032
-        ];
+      fetch('assets/data/france_meteo.geojson').then(function(response) {
+        return response.json().then(function(points_fc) {
+          var breaks = [
+            990, 992, 994, 996, 998,
+            1000, 1002, 1004, 1006, 1008,
+            1010, 1012, 1014, 1016, 1018,
+            1020, 1022, 1024, 1026, 1028,
+            1030, 1032
+          ];
 
-        var isolines = turf.isolines(points_fc, 'pressure', 100, breaks);
-        vectorSource.addFeatures(geojsonToFeatures(isolines, {
-          featureProjection: 'EPSG:3857'
-        }));
+          var isolines = turf.isolines(points_fc, 'pressure', 100, breaks);
+          vectorSource.addFeatures(geojsonToFeatures(isolines, {
+            featureProjection: 'EPSG:3857'
+          }));
+        });
       });
     </script>
   </body>

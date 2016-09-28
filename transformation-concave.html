@@ -43,18 +43,19 @@
         })
       });
 
-      fetchJSON('assets/data/randomConcave.geojson')
-        .then(function(points_fc) {
-        var hull = turf.concave(points_fc, 3, 'kilometers');
+      fetch('assets/data/randomConcave.geojson').then(function(response) {
+        return response.json().then(function(points_fc) {
+          var hull = turf.concave(points_fc, 3, 'kilometers');
 
-        console.log(hull);
-        vectorConcavePolygon.addFeatures(geojsonToFeatures(hull, {
-          featureProjection: 'EPSG:3857'
-        }));
+          console.log(hull);
+          vectorConcavePolygon.addFeatures(geojsonToFeatures(hull, {
+            featureProjection: 'EPSG:3857'
+          }));
 
-        vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
+          vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
+            featureProjection: 'EPSG:3857'
+          }));
+        });
       });
 
     </script>

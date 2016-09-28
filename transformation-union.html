@@ -40,26 +40,27 @@
 
       var polygons, union;
 
-      fetchJSON('assets/data/union.geojson')
-        .then(function(polygons_fc) {
-        console.log(polygons_fc.features);
-        polygons = polygons_fc;
-        var features = polygons_fc.features;
+      fetch('assets/data/union.geojson').then(function(response) {
+        return response.json().then(function(polygons_fc) {
+          console.log(polygons_fc.features);
+          polygons = polygons_fc;
+          var features = polygons_fc.features;
 
-        // Simple way but we could also use recursive function
-        for (var i = 1, len = features.length; i < len; i++) {
-          if (i == 1) {
-            union = turf.union(features[i - 1], features[i]);
-          } else {
-            union = turf.union(union, features[i]);
+          // Simple way but we could also use recursive function
+          for (var i = 1, len = features.length; i < len; i++) {
+            if (i == 1) {
+              union = turf.union(features[i - 1], features[i]);
+            } else {
+              union = turf.union(union, features[i]);
+            }
           }
-        }
 
-        console.log(union);
+          console.log(union);
 
-        vectorUnionPolygon.addFeatures(geojsonToFeatures(polygons_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
+          vectorUnionPolygon.addFeatures(geojsonToFeatures(polygons_fc, {
+            featureProjection: 'EPSG:3857'
+          }));
+        });
       });
       var button = document.getElementById('switchlayer');
       button.addEventListener('click', function(e) {

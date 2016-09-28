@@ -44,8 +44,8 @@
         })
       });
 
-      fetchJSON('assets/data/agglo_poly_nantes.geojson')
-        .then(function(polys_fc) {
+      fetch('assets/data/agglo_poly_nantes.geojson').then(function(response) {
+        return response.json().then(function(polys_fc) {
         console.log('FeatureCollection : ', polys_fc);
 
         var tesselated = turf.tesselate(polys_fc.features[0]);
@@ -53,6 +53,7 @@
           featureProjection: 'EPSG:3857'
         }));
 
+        });
       });
     </script>
   </body>

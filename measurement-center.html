@@ -72,20 +72,21 @@
         })
       });
 
-      fetchJSON('assets/data/key_shop_with_name_nantes_area.geojson')
-        .then(function(points_fc) {
-        console.log(points_fc);
+      fetch('assets/data/key_shop_with_name_nantes_area.geojson').then(function(response) {
+        return response.json().then(function(points_fc) {
+          console.log(points_fc);
 
-        var centerPoint = turf.center(points_fc);
-        console.log(centerPoint);
-        vectorSourceCenter.addFeatures(geojsonToFeatures(centerPoint, {
-          featureProjection: 'EPSG:3857'
-        }));
+          var centerPoint = turf.center(points_fc);
+          console.log(centerPoint);
+          vectorSourceCenter.addFeatures(geojsonToFeatures(centerPoint, {
+            featureProjection: 'EPSG:3857'
+          }));
 
-        vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
+          vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
+            featureProjection: 'EPSG:3857'
+          }));
 
+        });
       });
     </script>
   </body>

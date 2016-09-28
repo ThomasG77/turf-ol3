@@ -49,27 +49,28 @@
         })
       });
 
-      fetchJSON('assets/data/quartiers_nantes.geojson')
-        .then(function(polys_fc) {
-        console.log(polys_fc);
+      fetch('assets/data/quartiers_nantes.geojson').then(function(response) {
+        return response.json().then(function(polys_fc) {
+          console.log(polys_fc);
 
-        vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
-          featureProjection: 'EPSG:3857'
-        }));
+          vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+            featureProjection: 'EPSG:3857'
+          }));
 
-        // Create a button and bind a click function
-        var button = document.getElementById('zoomtobboxpolygon');
-        var draw;
-        button.addEventListener('click', function(e) {
-          // Random feature extraction
-          var features = vectorLayerPolygons.getSource().getFeatures();
-          var feat = features[getRandomInt(0, features.length - 1)];
-          // Serialize the feature to GeoJSON
-          var geojson_string = (new ol.format.GeoJSON()).writeFeature(feat);
-          // Zoom to bbox extent (EPSG 3857) using Turf
-          map.getView().fit(turf.bbox(JSON.parse(geojson_string)), map.getSize());
-          // Simpler way replacing above line using built-in OpenLayers library
-          // map.getView().fit(feat.getGeometry(), map.getSize());
+          // Create a button and bind a click function
+          var button = document.getElementById('zoomtobboxpolygon');
+          var draw;
+          button.addEventListener('click', function(e) {
+            // Random feature extraction
+            var features = vectorLayerPolygons.getSource().getFeatures();
+            var feat = features[getRandomInt(0, features.length - 1)];
+            // Serialize the feature to GeoJSON
+            var geojson_string = (new ol.format.GeoJSON()).writeFeature(feat);
+            // Zoom to bbox extent (EPSG 3857) using Turf
+            map.getView().fit(turf.bbox(JSON.parse(geojson_string)), map.getSize());
+            // Simpler way replacing above line using built-in OpenLayers library
+            // map.getView().fit(feat.getGeometry(), map.getSize());
+          });
         });
       });
 

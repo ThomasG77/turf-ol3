@@ -66,11 +66,15 @@
         })
       });
       Promise.all([
-        fetchJSON('assets/data/regions-20140528-6digits-100m.geojson', function(json) {
-          return json;
+        fetch('assets/data/regions-20140528-6digits-100m.geojson').then(function(response) {
+          return response.json().then(function(json) {
+            return json;
+          });
         }),
-        fetchJSON('assets/data/france_meteo.geojson', function(json) {
-          return json;
+        fetch('assets/data/france_meteo.geojson').then(function(response) {
+          return response.json().then(function(json) {
+            return json;
+          });
         })
       ]).then(function(returned) {
         var polys_fc = returned[0];
