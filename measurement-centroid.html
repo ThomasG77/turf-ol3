@@ -1,36 +1,33 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://rawcdn.githack.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
-    <script src="//npmcdn.com/@turf/turf@3.5.1/turf.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+    <script src="https://rawcdn.githack.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
     <script src="assets/js/es6-promise.min.js"></script>
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,fetch"></script>
     <script src="assets/js/helpers.js"></script>
-    <title>Turf and OpenLayers 3 - Centroid</title>
+    <title>Turf and OpenLayers - Centroid</title>
   </head>
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
 
       // Declare a source for points and drawing
-      var vectorSourceCenter = new ol.source.Vector();
-      var vectorSourcePoints = new ol.source.Vector();
+      var vectorSourceCentroid = new ol.source.Vector();
+      var vectorSourcePolygon = new ol.source.Vector();
 
-      var pointsStyle = [new ol.style.Style({
-        image: new ol.style.Circle({
-          stroke: new ol.style.Stroke({
-            color: 'white'
-          }),
-          fill: new ol.style.Fill({
-            color: '#1f6b75'
-          }),
-          radius: 4
+      var polygonStyle = [new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'white'
+        }),
+        fill: new ol.style.Fill({
+          color: '#1f6b75'
         })
       })];
 
-      var centerStyle = [new ol.style.Style({
+      var centroidStyle = [new ol.style.Style({
         image: new ol.style.Circle({
           stroke: new ol.style.Stroke({
             color: 'white'
@@ -42,14 +39,14 @@
         })
       })];
 
-      var vectorLayerCenter = new ol.layer.Vector({
-        source: vectorSourceCenter,
-        style: centerStyle
+      var vectorLayerCentroid = new ol.layer.Vector({
+        source: vectorSourceCentroid,
+        style: centroidStyle
       });
 
-      var vectorLayerPoints = new ol.layer.Vector({
-        source: vectorSourcePoints,
-        style: pointsStyle
+      var vectorLayerPolygon = new ol.layer.Vector({
+        source: vectorSourcePolygon,
+        style: polygonStyle
       });
 
       // Instantiate a map and add layers
@@ -59,30 +56,26 @@
           new ol.layer.Tile({
             source: new ol.source.OSM()
           }),
-          vectorLayerPoints,
-          vectorLayerCenter
+          vectorLayerPolygon,
+          vectorLayerCentroid
         ],
         view: new ol.View({
-          center: ol.proj.transform(
-            [-1.5603, 47.2383],
-            'EPSG:4326',
-            'EPSG:3857'
-          ),
+          center: ol.proj.fromLonLat([-1.5603, 47.2383]),
           zoom: 11
         })
       });
 
-      fetch('assets/data/key_shop_with_name_nantes_area.geojson').then(function(response) {
-        return response.json().then(function(points_fc) {
-          console.log(points_fc);
+      fetch('assets/data/agglo_poly_nantes.geojson').then(function(response) {
+        return response.json().then(function(polygon) {
+          console.log(polygon);
 
-          var centroidPoint = turf.centroid(points_fc);
-          console.log(centroidPoint);
-          vectorSourceCenter.addFeatures(geojsonToFeatures(centroidPoint, {
+          var centroid = turf.centroid(polygon);
+          console.log(centroid);
+          vectorSourceCentroid.addFeatures(geojsonToFeatures(centroid, {
             featureProjection: 'EPSG:3857'
           }));
 
-          vectorSourcePoints.addFeatures(geojsonToFeatures(points_fc, {
+          vectorSourcePolygon.addFeatures(geojsonToFeatures(polygon, {
             featureProjection: 'EPSG:3857'
           }));
         });

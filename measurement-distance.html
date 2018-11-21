@@ -1,19 +1,17 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://rawcdn.githack.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
-    <script src="//npmcdn.com/@turf/turf@3.5.1/turf.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.18.2/ol.js" type="text/javascript"></script>
+    <script src="//cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+    <script src="https://rawcdn.githack.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js" type="text/javascript"></script>
     <title>Turf and OpenLayers 3 - distance</title>
   </head>
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
       // Declare a GeoJSON source
-      var geojson_source = new ol.source.Vector({
-        projection: 'EPSG:3857'
-      });
+      var geojson_source = new ol.source.Vector();
 
       var x1 = 3.8671874999999996;
       var y1 = 46.800059446787316;
@@ -25,7 +23,7 @@
       var distance = turf.distance(
         turf.point(point1),
         turf.point(point2),
-        'kilometers'
+        {units: 'kilometers'}
       );
 
       var line = turf.lineString([point1, point2], { distance: distance});
@@ -64,7 +62,7 @@
                       }),
                       text: new ol.style.Text({
                         font: '12px Calibri,sans-serif',
-                        text: '' + Math.round(feature.get('distance')) + 'kilometers',
+                        text: '' + Math.round(feature.get('distance')) + ' kilometers',
                         offsetY: -15
                       })
                     })
