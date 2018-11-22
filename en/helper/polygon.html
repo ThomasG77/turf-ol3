@@ -1,0 +1,1340 @@
+
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>polygon · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="multiPoint.html" />
+    
+    
+    <link rel="prev" href="point.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../aggregation/">
+            
+                <a href="../aggregation/">
+            
+                    
+                    AGGREGATION
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../aggregation/collect.html">
+            
+                <a href="../aggregation/collect.html">
+            
+                    
+                    collect
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../measurement/">
+            
+                <a href="../measurement/">
+            
+                    
+                    MEASUREMENT
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../measurement/along.html">
+            
+                <a href="../measurement/along.html">
+            
+                    
+                    along
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../measurement/area.html">
+            
+                <a href="../measurement/area.html">
+            
+                    
+                    area
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../measurement/bboxPolygon.html">
+            
+                <a href="../measurement/bboxPolygon.html">
+            
+                    
+                    bboxPolygon
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.4" data-path="../measurement/bearing.html">
+            
+                <a href="../measurement/bearing.html">
+            
+                    
+                    bearing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.5" data-path="../measurement/center.html">
+            
+                <a href="../measurement/center.html">
+            
+                    
+                    center
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.6" data-path="../measurement/centroid.html">
+            
+                <a href="../measurement/centroid.html">
+            
+                    
+                    centroid
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.7" data-path="../measurement/destination.html">
+            
+                <a href="../measurement/destination.html">
+            
+                    
+                    destination
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.8" data-path="../measurement/distance.html">
+            
+                <a href="../measurement/distance.html">
+            
+                    
+                    distance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.9" data-path="../measurement/envelope.html">
+            
+                <a href="../measurement/envelope.html">
+            
+                    
+                    envelope
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.10" data-path="../measurement/lineDistance.html">
+            
+                <a href="../measurement/lineDistance.html">
+            
+                    
+                    lineDistance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.11" data-path="../measurement/midpoint.html">
+            
+                <a href="../measurement/midpoint.html">
+            
+                    
+                    midpoint
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.12" data-path="../measurement/pointOnSurface.html">
+            
+                <a href="../measurement/pointOnSurface.html">
+            
+                    
+                    pointOnSurface
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.13" data-path="../measurement/square.html">
+            
+                <a href="../measurement/square.html">
+            
+                    
+                    square
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../transformation/">
+            
+                <a href="../transformation/">
+            
+                    
+                    TRANSFORMATION
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="../transformation/bezier.html">
+            
+                <a href="../transformation/bezier.html">
+            
+                    
+                    bezier
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="../transformation/buffer.html">
+            
+                <a href="../transformation/buffer.html">
+            
+                    
+                    buffer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.3" data-path="../transformation/concave.html">
+            
+                <a href="../transformation/concave.html">
+            
+                    
+                    concave
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.4" data-path="../transformation/convex.html">
+            
+                <a href="../transformation/convex.html">
+            
+                    
+                    convex
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.5" data-path="../transformation/difference.html">
+            
+                <a href="../transformation/difference.html">
+            
+                    
+                    difference
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.6" data-path="../transformation/intersect.html">
+            
+                <a href="../transformation/intersect.html">
+            
+                    
+                    intersect
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.7" data-path="../transformation/simplify.html">
+            
+                <a href="../transformation/simplify.html">
+            
+                    
+                    simplify
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.8" data-path="../transformation/union.html">
+            
+                <a href="../transformation/union.html">
+            
+                    
+                    union
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../misc/">
+            
+                <a href="../misc/">
+            
+                    
+                    MISC
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="../misc/combine.html">
+            
+                <a href="../misc/combine.html">
+            
+                    
+                    combine
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="../misc/explode.html">
+            
+                <a href="../misc/explode.html">
+            
+                    
+                    explode
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="../misc/flip.html">
+            
+                <a href="../misc/flip.html">
+            
+                    
+                    flip
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.4" data-path="../misc/kinks.html">
+            
+                <a href="../misc/kinks.html">
+            
+                    
+                    kinks
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.5" data-path="../misc/lineSlice.html">
+            
+                <a href="../misc/lineSlice.html">
+            
+                    
+                    lineSlice
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.6" data-path="../misc/pointOnLine.html">
+            
+                <a href="../misc/pointOnLine.html">
+            
+                    
+                    pointOnLine
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    HELPER
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="featureCollection.html">
+            
+                <a href="featureCollection.html">
+            
+                    
+                    featureCollection
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="feature.html">
+            
+                <a href="feature.html">
+            
+                    
+                    feature
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="lineString.html">
+            
+                <a href="lineString.html">
+            
+                    
+                    lineString
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.4" data-path="multiLineString.html">
+            
+                <a href="multiLineString.html">
+            
+                    
+                    multiLineString
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.5" data-path="point.html">
+            
+                <a href="point.html">
+            
+                    
+                    point
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6.6" data-path="polygon.html">
+            
+                <a href="polygon.html">
+            
+                    
+                    polygon
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.7" data-path="multiPoint.html">
+            
+                <a href="multiPoint.html">
+            
+                    
+                    multiPoint
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.8" data-path="multiPolygon.html">
+            
+                <a href="multiPolygon.html">
+            
+                    
+                    multiPolygon
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.9" data-path="geometryCollection.html">
+            
+                <a href="geometryCollection.html">
+            
+                    
+                    geometryCollection
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="../data/">
+            
+                <a href="../data/">
+            
+                    
+                    DATA
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.7.1" data-path="../data/sample.html">
+            
+                <a href="../data/sample.html">
+            
+                    
+                    sample
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="../interpolation/">
+            
+                <a href="../interpolation/">
+            
+                    
+                    INTERPOLATION
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.8.1" data-path="../interpolation/isolines.html">
+            
+                <a href="../interpolation/isolines.html">
+            
+                    
+                    isolines
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="../joins/">
+            
+                <a href="../joins/">
+            
+                    
+                    JOINS
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.9.1" data-path="../joins/inside.html">
+            
+                <a href="../joins/inside.html">
+            
+                    
+                    inside
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9.2" data-path="../joins/tag.html">
+            
+                <a href="../joins/tag.html">
+            
+                    
+                    tag
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="../grids/">
+            
+                <a href="../grids/">
+            
+                    
+                    GRIDS
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.10.1" data-path="../grids/hexGrid.html">
+            
+                <a href="../grids/hexGrid.html">
+            
+                    
+                    hexGrid
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.2" data-path="../grids/pointGrid.html">
+            
+                <a href="../grids/pointGrid.html">
+            
+                    
+                    pointGrid
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.3" data-path="../grids/squareGrid.html">
+            
+                <a href="../grids/squareGrid.html">
+            
+                    
+                    squareGrid
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.4" data-path="../grids/triangleGrid.html">
+            
+                <a href="../grids/triangleGrid.html">
+            
+                    
+                    triangleGrid
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10.5" data-path="../grids/within.html">
+            
+                <a href="../grids/within.html">
+            
+                    
+                    within
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.11" data-path="../classification/">
+            
+                <a href="../classification/">
+            
+                    
+                    CLASSIFICATION
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.11.1" data-path="../classification/nearest.html">
+            
+                <a href="../classification/nearest.html">
+            
+                    
+                    nearest
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12" data-path="../meta/">
+            
+                <a href="../meta/">
+            
+                    
+                    META
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.12.1" data-path="../meta/propEach.html">
+            
+                <a href="../meta/propEach.html">
+            
+                    
+                    propEach
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12.2" data-path="../meta/coordEach.html">
+            
+                <a href="../meta/coordEach.html">
+            
+                    
+                    coordEach
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12.3" data-path="../meta/coordReduce.html">
+            
+                <a href="../meta/coordReduce.html">
+            
+                    
+                    coordReduce
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12.4" data-path="../meta/featureEach.html">
+            
+                <a href="../meta/featureEach.html">
+            
+                    
+                    featureEach
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.12.5" data-path="../meta/getCoord.html">
+            
+                <a href="../meta/getCoord.html">
+            
+                    
+                    getCoord
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13" data-path="../assertions/">
+            
+                <a href="../assertions/">
+            
+                    
+                    ASSERTIONS
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.13.1" data-path="../assertions/featureOf.html">
+            
+                <a href="../assertions/featureOf.html">
+            
+                    
+                    featureOf
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.2" data-path="../assertions/collectionOf.html">
+            
+                <a href="../assertions/collectionOf.html">
+            
+                    
+                    collectionOf
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.3" data-path="../assertions/bbox.md">
+            
+                <span>
+            
+                    
+                    bbox
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.4" data-path="../assertions/circle.html">
+            
+                <a href="../assertions/circle.html">
+            
+                    
+                    circle
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.5" data-path="../assertions/geojsonType.html">
+            
+                <a href="../assertions/geojsonType.html">
+            
+                    
+                    geojsonType
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.6" data-path="../assertions/propReduce.html">
+            
+                <a href="../assertions/propReduce.html">
+            
+                    
+                    propReduce
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.7" data-path="../assertions/coordAll.html">
+            
+                <a href="../assertions/coordAll.html">
+            
+                    
+                    coordAll
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.13.8" data-path="../assertions/tesselate.html">
+            
+                <a href="../assertions/tesselate.html">
+            
+                    
+                    tesselate
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >polygon</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="turfpolygon">turf.polygon</h2>
+<p>Takes an array of LinearRings and optionally an Object with properties and returns a Polygon feature.</p>
+<iframe src="../../helper-polygon.html" width="770" height="500" frameborder="0" seamless="seamless">
+</iframe>
+
+<pre><code class="lang-html"><span class="hljs-meta">&lt;!doctype html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://rawcdn.githack.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;assets/css/styles.css&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;//cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js&quot;</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://rawcdn.githack.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Turf and OpenLayers 3 - Helper polygon<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;map&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;map&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span>&gt;</span><span class="actionscript">
+
+      <span class="hljs-comment">// Cantine num&#xE9;rique, a coworking space in Nantes, France</span>
+      <span class="hljs-keyword">var</span> coordinates = [
+        [
+          [<span class="hljs-number">-1.5516916</span>, <span class="hljs-number">47.2120376</span>],
+          [<span class="hljs-number">-1.5516754</span>, <span class="hljs-number">47.2120167</span>],
+          [<span class="hljs-number">-1.551732</span>, <span class="hljs-number">47.211996</span>],
+          [<span class="hljs-number">-1.551731</span>, <span class="hljs-number">47.211994</span>],
+          [<span class="hljs-number">-1.551672</span>, <span class="hljs-number">47.2119135</span>],
+          [<span class="hljs-number">-1.551621</span>, <span class="hljs-number">47.211844</span>],
+          [<span class="hljs-number">-1.551351</span>, <span class="hljs-number">47.211931</span>],
+          [<span class="hljs-number">-1.551272</span>, <span class="hljs-number">47.211957</span>],
+          [<span class="hljs-number">-1.551192</span>, <span class="hljs-number">47.211983</span>],
+          [<span class="hljs-number">-1.551053</span>, <span class="hljs-number">47.212028</span>],
+          [<span class="hljs-number">-1.55098</span>, <span class="hljs-number">47.212054</span>],
+          [<span class="hljs-number">-1.550902</span>, <span class="hljs-number">47.212083</span>],
+          [<span class="hljs-number">-1.55095</span>, <span class="hljs-number">47.212157</span>],
+          [<span class="hljs-number">-1.550958</span>, <span class="hljs-number">47.212154</span>],
+          [<span class="hljs-number">-1.550954</span>, <span class="hljs-number">47.212148</span>],
+          [<span class="hljs-number">-1.55111</span>, <span class="hljs-number">47.212092</span>],
+          [<span class="hljs-number">-1.5511215</span>, <span class="hljs-number">47.2121064</span>],
+          [<span class="hljs-number">-1.551147</span>, <span class="hljs-number">47.212138</span>],
+          [<span class="hljs-number">-1.551117</span>, <span class="hljs-number">47.212143</span>],
+          [<span class="hljs-number">-1.551113</span>, <span class="hljs-number">47.212131</span>],
+          [<span class="hljs-number">-1.551046</span>, <span class="hljs-number">47.212142</span>],
+          [<span class="hljs-number">-1.55105</span>, <span class="hljs-number">47.212153</span>],
+          [<span class="hljs-number">-1.551002</span>, <span class="hljs-number">47.212161</span>],
+          [<span class="hljs-number">-1.551028</span>, <span class="hljs-number">47.212238</span>],
+          [<span class="hljs-number">-1.551184</span>, <span class="hljs-number">47.212183</span>],
+          [<span class="hljs-number">-1.551201</span>, <span class="hljs-number">47.212204</span>],
+          [<span class="hljs-number">-1.5512059</span>, <span class="hljs-number">47.2122115</span>],
+          [<span class="hljs-number">-1.5516572</span>, <span class="hljs-number">47.2120498</span>],
+          [<span class="hljs-number">-1.5516916</span>, <span class="hljs-number">47.2120376</span>]
+        ]
+      ];
+      <span class="hljs-keyword">var</span> polygon = turf.polygon(coordinates, {
+        <span class="hljs-string">&apos;name&apos;</span>: <span class="hljs-string">&apos;La Cantine Num&#xE9;rique&apos;</span>,
+        <span class="hljs-string">&apos;amenity&apos;</span>: <span class="hljs-string">&apos;coworking_space&apos;</span>,
+        <span class="hljs-string">&apos;url&apos;</span>: <span class="hljs-string">&apos;cantine-nantes.org&apos;</span>
+      });
+
+      <span class="hljs-comment">// Declare a formatter to read GeoJSON</span>
+      <span class="hljs-keyword">var</span> format = <span class="hljs-keyword">new</span> ol.format.GeoJSON();
+
+      <span class="hljs-comment">// Declare a source</span>
+      <span class="hljs-keyword">var</span> vectorSource = <span class="hljs-keyword">new</span> ol.source.Vector();
+
+      <span class="hljs-comment">// When reading feature, reproject to EPSG 3857</span>
+      <span class="hljs-keyword">var</span> feature = format.readFeature(polygon, {
+        featureProjection: <span class="hljs-string">&apos;EPSG:3857&apos;</span>
+      });
+      <span class="hljs-comment">// Add a feature</span>
+      vectorSource.addFeature(feature);
+
+      <span class="hljs-comment">// Declare a vector layer with the already</span>
+      <span class="hljs-comment">// created source containing added feature</span>
+      <span class="hljs-keyword">var</span> vectorLayer = <span class="hljs-keyword">new</span> ol.layer.Vector({
+        source: vectorSource,
+        style: [
+          <span class="hljs-keyword">new</span> ol.style.Style({
+            stroke: <span class="hljs-keyword">new</span> ol.style.Stroke({
+              color: [<span class="hljs-number">0</span>, <span class="hljs-number">121</span>, <span class="hljs-number">88</span>, <span class="hljs-number">1</span>],
+              width: <span class="hljs-number">2</span>
+            })
+          })
+        ]
+      });
+
+      <span class="hljs-comment">// Instanciate a map and add layers</span>
+      <span class="hljs-keyword">var</span> map = <span class="hljs-keyword">new</span> ol.Map({
+        target: <span class="hljs-string">&apos;map&apos;</span>,
+        layers: [
+          <span class="hljs-keyword">new</span> ol.layer.Tile({
+            source: <span class="hljs-keyword">new</span> ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        view: <span class="hljs-keyword">new</span> ol.View({
+          center: ol.proj.fromLonLat([<span class="hljs-number">-1.55131</span>, <span class="hljs-number">47.21204</span>]),
+          zoom: <span class="hljs-number">18</span>
+        })
+      });
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="point.html" class="navigation navigation-prev " aria-label="Previous page: point">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="multiPoint.html" class="navigation navigation-next " aria-label="Next page: multiPoint">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"polygon","level":"1.6.6","depth":2,"next":{"title":"multiPoint","level":"1.6.7","depth":2,"path":"helper/multiPoint.md","ref":"helper/multiPoint.md","articles":[]},"previous":{"title":"point","level":"1.6.5","depth":2,"path":"helper/point.md","ref":"helper/point.md","articles":[]},"dir":"ltr"},"config":{"plugins":["include","include-codeblock"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"include":{},"include-codeblock":{"check":false,"edit":false,"fixlang":false,"lang":"","template":"default","theme":"chrome","unindent":false},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"en","gitbook":"*"},"file":{"path":"helper/polygon.md","mtime":"2016-09-19T23:00:43.703Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-11-22T16:15:44.405Z"},"basePath":"..","book":{"language":"en"}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../../gitbook/gitbook.js"></script>
+    <script src="../../gitbook/theme.js"></script>
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
