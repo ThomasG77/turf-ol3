@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" href="https://rawcdn.githack.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
-    <link rel="stylesheet" href="assets/ol3/css/ol3-popup.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/ol-popup@4.0.0/src/ol-popup.css" type="text/css">
     <link rel="stylesheet" href="assets/css/styles.css" type="text/css">
     <script src="//cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
     <script src="https://rawcdn.githack.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
-    <script src="assets/ol3/js/ol3-popup.js"></script>
+    <script src="https://unpkg.com/ol-popup@4.0.0"></script>
     <script src="assets/js/es6-promise.min.js"></script>
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,fetch"></script>
     <script src="assets/js/helpers.js"></script>
@@ -16,8 +16,8 @@
     <div id="map" class="map"></div>
     <script type="text/javascript">
       // Declare a source for points and drawing
-      var vectorSourcePolygons = new ol.source.GeoJSON();
-      var vectorSourcePoints = new ol.source.GeoJSON();
+      var vectorSourcePolygons = new ol.source.Vector();
+      var vectorSourcePoints = new ol.source.Vector();
       var pointsStyle = [
         new ol.style.Style({
           image: new ol.style.Circle({
@@ -38,6 +38,9 @@
             stroke: new ol.style.Stroke({
               color: 'black',
               width: 1
+            }),
+            fill: new ol.style.Fill({
+              color: 'rgba(0, 0, 0, 0)'
             })
           })
         ]
@@ -102,13 +105,14 @@
           ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'),
           2
         );
-        var feature = map.forEachFeatureAtPixel(evt.pixel,
-          function(feature, layer) {
-            if (layer === vectorLayerPolygons) {
-              return feature;
-            }
+        var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature) {
+          return feature;
+        }, {
+          layerFilter: function(layer){
+            return layer === vectorLayerPolygons;
           }
-        );
+          // ,hitTolerance: 1
+        });
         var popup_content;
         if (feature) {
           popup_content = 'Name: ' + feature.get('nom') + '<br/>' +

@@ -327,7 +327,7 @@
       console.log('Number of points before simplification',
                   line1.geometry.coordinates.length);
       //Simplify the line
-      line1 = turf.simplify(line1, 0.001, false);
+      line1 = turf.simplify(line1, {tolerance: 0.001, highQuality: false});
       console.log('Number of points after simplification',
                   line1.geometry.coordinates.length);
 

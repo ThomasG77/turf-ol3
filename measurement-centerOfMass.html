@@ -8,34 +8,56 @@
     <script src="assets/js/es6-promise.min.js"></script>
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,fetch"></script>
     <script src="assets/js/helpers.js"></script>
-    <title>Turf and OpenLayers 3 - Buffer</title>
+    <title>Turf and OpenLayers - CenterOfMass</title>
   </head>
   <body>
     <div id="map" class="map"></div>
     <script type="text/javascript">
 
-      // Declare a source for polygons
-      var vectorSourcePolygons = new ol.source.Vector();
+      // Declare a source for points and drawing
+      var vectorSourceCenterOfMass = new ol.source.Vector();
+      var vectorSourcePolygon = new ol.source.Vector();
 
-      var pointsStyle = [new ol.style.Style({
-        image: new ol.style.Circle({
-          fill: new ol.style.Fill({color: 'black'}),
-          radius: 3
+      var polygonStyle = [new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'white'
+        }),
+        fill: new ol.style.Fill({
+          color: '#1f6b75'
         })
       })];
 
-      var vectorLayerPolygons = new ol.layer.Vector({
-        source: vectorSourcePolygons
+      var centerOfMassStyle = [new ol.style.Style({
+        image: new ol.style.Circle({
+          stroke: new ol.style.Stroke({
+            color: 'white'
+          }),
+          fill: new ol.style.Fill({
+            color: 'black'
+          }),
+          radius: 5
+        })
+      })];
+
+      var vectorLayerCenterOfMass = new ol.layer.Vector({
+        source: vectorSourceCenterOfMass,
+        style: centerOfMassStyle
       });
 
-      // Instanciate a map and add layers
+      var vectorLayerPolygon = new ol.layer.Vector({
+        source: vectorSourcePolygon,
+        style: polygonStyle
+      });
+
+      // Instantiate a map and add layers
       var map = new ol.Map({
         target: 'map',
         layers: [
           new ol.layer.Tile({
             source: new ol.source.OSM()
           }),
-          vectorLayerPolygons
+          vectorLayerPolygon,
+          vectorLayerCenterOfMass
         ],
         view: new ol.View({
           center: ol.proj.fromLonLat([-1.5603, 47.2383]),
@@ -44,25 +66,20 @@
       });
 
       fetch('assets/data/agglo_poly_nantes.geojson').then(function(response) {
-        return response.json().then(function(polys_fc) {
-          console.log(polys_fc);
+        return response.json().then(function(polygon) {
+          console.log(polygon);
 
-          vectorSourcePolygons.addFeatures(geojsonToFeatures(polys_fc, {
+          var centerOfMass = turf.centerOfMass(polygon);
+          console.log(centerOfMass);
+          vectorSourceCenterOfMass.addFeatures(geojsonToFeatures(centerOfMass, {
             featureProjection: 'EPSG:3857'
           }));
 
-          var buffer = turf.buffer(polys_fc, 3, {
-            units: 'kilometers'
-          });
-          console.log(buffer);
-
-          vectorSourcePolygons.addFeatures(geojsonToFeatures(buffer, {
+          vectorSourcePolygon.addFeatures(geojsonToFeatures(polygon, {
             featureProjection: 'EPSG:3857'
           }));
-
         });
       });
-
     </script>
   </body>
 </html>

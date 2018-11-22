@@ -25,7 +25,9 @@
       button.addEventListener('click', function(e) {
         var inputValue = length.value;
         if (inputValue.match(/^\d+$/)) {
-          var along = turf.along(geojson.features[0], +inputValue, 'kilometers');
+          var along = turf.along(geojson.features[0], +inputValue, {
+            units: 'kilometers'
+          });
           console.log(along);
           var featuresPt = (new ol.format.GeoJSON()).readFeatures(along, {
             dataProjection: 'EPSG:4326',
